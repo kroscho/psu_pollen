@@ -1,0 +1,65 @@
+.specie {
+  width: 150px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.viewDataWrapper {
+  padding: 16px 0 16px 0;
+}
+
+.viewDataWrapper .specie:last-child {
+  margin-bottom: 0;
+}
+
+.informationText {
+  margin-top: 16px;
+}
+
+.viewDataWrapper {
+  display: flex;
+}
+
+.viewDataRightColumn {
+  margin-left: 36px;
+}
+
+.viewDataValue {
+  width: 50px;
+  text-align: center;
+}
+
+.none {
+  background-color: #d4d4d4;
+}
+
+.low {
+  background-color: #01ff01;
+}
+
+.medium {
+  background-color: #feff04;
+}
+
+.high {
+  background-color: #fa8207;
+}
+
+.veryHigh {
+  background-color: #fb0102;
+}
+
+.levelsImage {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.viewImageDayPicker {
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.graphTitle {
+  padding-left: 45px;
+}

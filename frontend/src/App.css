@@ -1,0 +1,35 @@
+.container {
+  padding: 20px 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #f0f2f5;
+}
+
+.headerLink {
+  margin-right: 20px;
+}
+
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paragraph {
+  font-size: 22px;
+  text-align: justify;
+}
+
+.image {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.allergenImageWrapper {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.allergenImage {
+  width: 65%;
+}

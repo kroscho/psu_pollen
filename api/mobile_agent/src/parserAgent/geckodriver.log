@@ -1,0 +1,199 @@
+1636151633118	geckodriver	INFO	Listening on 127.0.0.1:51539
+1636151734246	geckodriver	INFO	Listening on 127.0.0.1:51564
+1636152111571	geckodriver	INFO	Listening on 127.0.0.1:51619
+1636152196640	geckodriver	INFO	Listening on 127.0.0.1:51652
+1636206049704	geckodriver	INFO	Listening on 127.0.0.1:63140
+1636206068196	geckodriver	INFO	Listening on 127.0.0.1:60491
+1636206113067	geckodriver	INFO	Listening on 127.0.0.1:49299
+1636206117184	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofilecvNQth"
+JavaScript error: resource://torbutton/modules/tor-control-port.js, line 237: Error: authenticate 57457c34294645383d5758542b377458 -> 515 Authentication failed: Password did not match HashedControlPassword *or* authentication cookie.
+1636206118777	Marionette	INFO	Listening on port 49308
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636206119221	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206141561	Marionette	INFO	Stopped listening on port 49308
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636206151935	geckodriver	INFO	Listening on 127.0.0.1:64838
+1636206155984	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofileRysTqM"
+JavaScript error: resource://torbutton/modules/tor-control-port.js, line 237: Error: authenticate 3a7c68232622675b4b6a47644d6c6e4b -> 515 Authentication failed: Password did not match HashedControlPassword *or* authentication cookie.
+1636206157554	Marionette	INFO	Listening on port 64848
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636206158027	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206167465	Marionette	INFO	Stopped listening on port 64848
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636206237685	geckodriver	INFO	Listening on 127.0.0.1:55276
+1636206241759	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofilehQIoJo"
+JavaScript error: resource://torbutton/modules/tor-control-port.js, line 237: Error: authenticate 3e282c30315b32597b67256e49293965 -> 515 Authentication failed: Password did not match HashedControlPassword *or* authentication cookie.
+1636206243283	Marionette	INFO	Listening on port 55284
+1636206243317	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206250566	Marionette	INFO	Stopped listening on port 55284
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636206867095	geckodriver	INFO	Listening on 127.0.0.1:53741
+1636206871233	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofilelWdKYQ"
+JavaScript error: resource://torbutton/modules/tor-control-port.js, line 237: Error: authenticate 4833697b77355b544a79407471634274 -> 515 Authentication failed: Password did not match HashedControlPassword *or* authentication cookie.
+1636206872644	Marionette	INFO	Listening on port 53750
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636206872791	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206896143	Marionette	INFO	Stopped listening on port 53750
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636206919487	geckodriver	INFO	Listening on 127.0.0.1:53780
+1636206923501	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofileJ4aZ1B"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206928922	Marionette	INFO	Listening on port 53788
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636206929316	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+1636206968744	Marionette	INFO	Stopped listening on port 53788
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636206970297	geckodriver	INFO	Listening on 127.0.0.1:53818
+1636206974402	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofileTwD0Ct"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636206979895	Marionette	INFO	Listening on port 53827
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636206980198	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+console.error: "Store does not have a valid reducer. Make sure the argument passed to combineReducers is an object whose values are reducers."
+JavaScript error: resource:///actors/RFPHelperParent.jsm, line 28: TypeError: browser is null
+JavaScript error: resource:///actors/RFPHelperParent.jsm, line 29: TypeError: window.RFPHelper is undefined
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+console.error: "Unable to find a proper document to create the device-selector MenuButton for RDM"
+1636208162680	Marionette	INFO	Stopped listening on port 53827
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+\Temp\\rust_mozprofileyLwBjU"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636207971340	Marionette	INFO	Listening on port 58573
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636207971673	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+1636208160534	Marionette	INFO	Stopped listening on port 58573
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+\Temp\\rust_mozprofilee5Zr7s"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636208021407	Marionette	INFO	Listening on port 54859
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636208021599	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+1636208161563	Marionette	INFO	Stopped listening on port 54859
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636209758497	geckodriver	INFO	Listening on 127.0.0.1:63347
+1636209762526	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofilePOBVaR"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636209767935	Marionette	INFO	Listening on port 63356
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636209768324	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+1636209787921	Marionette	INFO	Stopped listening on port 63356
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1636209798413	geckodriver	INFO	Listening on 127.0.0.1:59851
+1636209802452	mozrunner::runner	INFO	Running command: "D:\\Программы\\Tor\\Tor Browser\\Browser\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\NIKE0\\AppData\\Local\\Temp\\rust_mozprofilex4jILq"
+JavaScript error: chrome://torbutton/content/tor-circuit-display.js, line 478: TypeError: myController is null
+1636209807803	Marionette	INFO	Listening on port 59859
+JavaScript error: moz-extension://662b6f11-bff5-465a-9c85-b5e73da53c0c/background-scripts/background.js, line 688: TypeError: store.local is undefined
+1636209808235	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource:///modules/ExtensionMessaging.jsm, line 70: Error: Promised response from onMessage listener went out of scope
+1636209834132	Marionette	INFO	Stopped listening on port 59859
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+

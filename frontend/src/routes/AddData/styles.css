@@ -1,0 +1,23 @@
+.addDataInput {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.speciesWrapper {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.speciesWrapper .input:last-child {
+  margin-bottom: 0;
+}
+
+.addDataInputs {
+  display: flex;
+}
+.addDataRightColumn {
+  margin-left: 36px;
+}

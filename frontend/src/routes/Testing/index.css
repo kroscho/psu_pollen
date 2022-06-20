@@ -1,0 +1,19 @@
+.logo {
+  height: 32px;
+  margin: 1px auto;
+  text-align: center;
+  color: #212529;
+  font-size: 22px;
+  font-weight: bolder;
+}
+
+.site-layout-sub-header-background {
+  background: #fff;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+  [data-theme="dark"] .site-layout-sub-header-background {
+    background: #141414;
+  }
