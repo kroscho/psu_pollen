@@ -33,7 +33,7 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
                 let formData = new FormData();
                 formData.append("file", element);
                 formData.append("name", "Name");
-                const url ="http://localhost:5000/api/upload_files/" + userStore.CurModule.moduleObj + "/" + selectedTerms
+                const url ="https://psu-pollen.herokuapp.com/api/upload_files/" + userStore.CurModule.moduleObj + "/" + selectedTerms
                 axios({
                     url: url,
                     method: "POST",

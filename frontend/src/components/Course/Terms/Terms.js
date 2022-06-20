@@ -31,7 +31,7 @@ const TermsPage = () => {
 
     const downloadEmployeeData = (lecture) => {
         //console.log(lecture)
-        const url = 'http://localhost:5000/api/dowload_file/' + lecture.lectureName 
+        const url = 'https://psu-pollen.herokuapp.com/dowload_file/' + lecture.lectureName 
         fetch(url)
             .then(response => {
                // console.log(response)
