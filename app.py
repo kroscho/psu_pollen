@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, make_response
-from flask_cors import CORS, cross_origin
+#from flask_cors import CORS, cross_origin
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.utils import secure_filename
 auth = HTTPBasicAuth()
@@ -9,20 +9,20 @@ import os, sys
 path_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(path_dir)
 
-from mobile_agent.api.services.spqrqlQueries.main import SparqlQueries
-from mobile_agent.src.utils import typeData
+from api.mobile_agent.api.services.spqrqlQueries.main import SparqlQueries
+from api.mobile_agent.src.utils import typeData
 
 path_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 sys.path.append(path_dir)
 
-from testing.sparqlQueries.main import TestingService
+from api.testing.sparqlQueries.main import TestingService
 
 UPLOAD_FOLDER = 'files/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-CORS(app)
+#CORS(app)
 
 @app.get('/api/pollen/books_by_name')
 def api_get_books_by_name():
