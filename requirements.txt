@@ -49,6 +49,7 @@ pygrok==1.0.0
 pymorphy2==0.9.1
 pymorphy2-dicts-ru==2.4.417127.4579844
 pyparsing==3.0.6
+pywin32==223;platform_system == "Windows".
 PySocks==1.7.1
 python-dateutil==2.8.2
 python-docx==0.8.11
