@@ -22,8 +22,8 @@ Flask-HTTPAuth==4.5.0
 fonttools==4.28.5
 grpcio==1.42.0
 grpcio-tools==1.42.0
+gunicorn==20.1.0
 idna==3.2
-gunicorn==20.0.4
 isodate==0.6.1
 itsdangerous==2.0.1
 Jinja2==3.0.1
@@ -50,11 +50,13 @@ pygrok==1.0.0
 pymorphy2==0.9.1
 pymorphy2-dicts-ru==2.4.417127.4579844
 pyparsing==3.0.6
+pypiwin32==223
 PySocks==1.7.1
 python-dateutil==2.8.2
 python-docx==0.8.11
 pythonds==1.2.1
 pytz==2022.1
+pywin32==302
 rdflib==6.1.1
 regex==2021.11.10
 requests==2.26.0
