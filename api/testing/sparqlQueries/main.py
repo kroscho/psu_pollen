@@ -12,7 +12,7 @@ print(path_dir)
 
 from testing.sparqlQueries.config import config
 import testing.sparqlQueries.queries as queries
-from testing.sparqlQueries.utils import checkAnswer, checkCorrectAnswer, getTermFromText, getTokensFromTexts, getTypeTaskValue
+from testing.sparqlQueries.utils import checkAnswer, checkCorrectAnswer, getTypeTaskValue
 from testing.sparqlQueries.autoGeneration import AutoGeneration, typeTemplate
 
 # тип ответа на вопрос
@@ -1216,7 +1216,7 @@ class TestingService:
         
         #print(listTerms)
         return listTerms, listTermsNormalize
-
+    '''
     def getTermByTask(self, task):
         tokens = getTokensFromTexts([task["question"]])
         terms = self.getTermsOfField("палинология")
@@ -1224,7 +1224,7 @@ class TestingService:
         term = getTermFromText(tokens[0], terms)
         print(term)
         return term
-
+    '''
     def getKnownTermsByUser(self, userObj, termsScores):
         query = queries.getKnownTermsByUser(userObj)
         resultTerms = self.graph.query(query)
@@ -1337,7 +1337,7 @@ class TestingService:
         newTerm = Термин(nameTerm)
         template = ШаблонВопроса(item["template"])
 
-        termNormalize = getTokensFromTexts([nameTerm])
+        termNormalize = "termNormalize" #getTokensFromTexts([nameTerm])
         prevTerm = Термин(item["subjectArea"].replace(" ", "_"))
 
         newTerm.termNormalize = termNormalize[0][0]
@@ -1459,7 +1459,7 @@ class TestingService:
             {
                 "область": "палинология", 
                 "term": "палинология",
-                "termNormalize": getTokensFromTexts(["палинология"])[0],
+                "termNormalize": "termNormalize",
                 "prevTerm": "", 
                 "moveToPrev": False,
                 "divided_in_groups": [],
@@ -1469,7 +1469,7 @@ class TestingService:
             {
                 "область": "палинология", 
                 "term": "морфологические_характеристики", 
-                "termNormalize": getTokensFromTexts(["морфологические_характеристики"])[0],
+                "termNormalize": "termNormalize",
                 "prevTerm": "", 
                 "moveToPrev": False,
                 "divided_in_groups": ["высшие", "низшие"],

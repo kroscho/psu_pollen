@@ -1,7 +1,7 @@
 import difflib
 import difflib
 from lib2to3.pgen2 import token
-import nltk
+#import nltk
 import pymorphy2
 import string
 
@@ -66,6 +66,7 @@ def similarity(s1, s2):
     matcher = difflib.SequenceMatcher(None, normalized1, normalized2)
     return matcher.ratio()
 
+'''
 stop_words = nltk.corpus.stopwords.words('russian')
 stop_words += ['—']
 stop_words += list(string.punctuation)
@@ -95,7 +96,7 @@ def getTokensFromTexts(texts):
     tokens = tokenized_texts(texts)
     tokens = normalized_texts(tokens)
     return tokens
-
+'''
 def findTermByName(name, terms):
     for t in terms:
         if t["term"] == name:
@@ -109,7 +110,7 @@ def getPrevTerm(term, terms):
     else:
         return term
                 
-
+'''
 def getTermFromText(tokens, terms):
     listTerms = []
 
@@ -134,3 +135,4 @@ def getTermFromText(tokens, terms):
         return getPrevTerm(listTerms[0], terms)
     else:
         return None
+'''
