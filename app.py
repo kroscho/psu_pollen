@@ -17,7 +17,7 @@ sys.path.append(path_dir)
 
 from api.testing.sparqlQueries.main import TestingService
 
-UPLOAD_FOLDER = 'files/'
+UPLOAD_FOLDER = 'api/mobile_agent/api/files'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 
 app = Flask(__name__, static_url_path='', static_folder='api/testing/testing_ont.owl')
