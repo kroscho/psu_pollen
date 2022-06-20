@@ -1,7 +1,7 @@
 from email import utils
 from enum import Enum
 
-from testing.sparqlQueries.utils import getTokensFromTexts
+#from testing.sparqlQueries.utils import getTokensFromTexts
 
 class typeTemplate(Enum):
     Name = "1"                          # название чего то
@@ -55,7 +55,7 @@ class AutoGeneration:
             template["tokens"] = tokens[0]
         '''
         return templates
-    
+    '''
     def toDetermineType(self, text):
         tokens = getTokensFromTexts([text])
         maxLen = 0
@@ -71,4 +71,4 @@ class AutoGeneration:
         print(typeTemp)
         return typeTemp, tokens
 
-
+'''
