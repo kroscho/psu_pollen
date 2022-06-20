@@ -931,6 +931,6 @@ def api_download_file(filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-app.env = 'development'
+#app.env = 'development'
 
-app.run(port=5000, host='0.0.0.0', debug=True)
+#app.run(port=5000, host='0.0.0.0', debug=True)
