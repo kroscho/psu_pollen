@@ -20,7 +20,7 @@ from api.testing.sparqlQueries.main import TestingService
 UPLOAD_FOLDER = 'files/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='api/testing/testing_ont.owl')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #CORS(app)
 
@@ -222,7 +222,7 @@ def api_create_test():
     print("Test And Module: ", _item["test"], _item["module"])
     test = _item["test"] 
     module = _item["module"]
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     isExistNameTest = ont.checkNameTest(test['testName'])
     if isExistNameTest:
         return make_response(json.dumps({
@@ -240,7 +240,7 @@ def api_create_course():
     _newCourse = request.get_json()
     print("New course: ", _newCourse['createdCourse'])
     _newCourse = _newCourse['createdCourse']
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     isExistNameCourse = ont.checkNameCourse(_newCourse['title'])
     if isExistNameCourse:
         return make_response(json.dumps({
@@ -258,7 +258,7 @@ def api_edit_course():
     _newCourse = request.get_json()
     print("New course: ", _newCourse['createdCourse'])
     _newCourse = _newCourse['createdCourse']
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     isExistNameCourse = ont.checkNameCourse(_newCourse['title'])
     if isExistNameCourse:
         return make_response(json.dumps({
@@ -276,7 +276,7 @@ def api_create_module():
     _item = request.get_json()
     _item = _item.get('item')
     print("Module CourseObj: ", _item["module"], _item["courseObj"])
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     ont.createModule(_item["module"], _item["courseObj"])
     return make_response(json.dumps({
         'statusCode': 200,
@@ -285,7 +285,7 @@ def api_create_module():
 
 @app.get('/api/get_tests')
 def api_get_tests():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getTests()
     response = make_response(json.dumps({
         'statusCode': 200,
@@ -296,7 +296,7 @@ def api_get_tests():
 
 @app.get('/api/get_test')
 def api_get_test():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _testName = request.args.get('_testName', '')
     print("NAME: ", _testName)
     data = ont.getTest(_testName)
@@ -310,7 +310,7 @@ def api_get_test():
 
 @app.get('/api/get_templates')
 def api_get_templates():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getTemplates()
     response = make_response(json.dumps({
         'statusCode': 200,
@@ -321,7 +321,7 @@ def api_get_templates():
 
 @app.get('/api/get_all_courses')
 def api_get_all_courses():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getAllCourses()
     response = make_response(json.dumps({
         'statusCode': 200,
@@ -332,7 +332,7 @@ def api_get_all_courses():
 
 @app.get('/api/get_test_with_answers')
 def api_get_test_with_answers():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _testName = request.args.get('_testName', '')
     print("NAME: ", _testName)
     data = ont.getTestWithAnswers(_testName)
@@ -346,7 +346,7 @@ def api_get_test_with_answers():
 
 @app.post('/api/update_test')
 def api_update_test():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _updatedTest = request.get_json()
     print("Updated test: ", _updatedTest.get('updatedTest'))
     _updatedTest = _updatedTest.get('updatedTest')
@@ -362,7 +362,7 @@ def api_update_test():
 
 @app.post('/api/delete_test')
 def api_delete_test():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _deletedTest = request.get_json()
     print("Deleted test: ", _deletedTest.get('deletedTest'))
     _deletedTest = _deletedTest.get('deletedTest')
@@ -378,7 +378,7 @@ def api_delete_test():
 
 @app.post('/api/delete_course')
 def api_delete_course():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _course = request.get_json()
     print("Deleted course: ", _course.get('course'))
     _course = _course.get('course')
@@ -394,7 +394,7 @@ def api_delete_course():
 
 @app.post('/api/delete_module')
 def api_delete_module():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('item')
     moduleObj = _item["moduleObj"]
@@ -411,7 +411,7 @@ def api_delete_module():
 
 @app.post('/api/get_result_attempt')
 def api_get_result_attempt():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _answers = request.get_json()
     _answers = _answers.get('answers')
     _user = request.get_json()
@@ -428,7 +428,7 @@ def api_get_result_attempt():
 
 @app.post('/api/create_user')
 def api_create_user():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     user = request.get_json()
     user = user.get('user')
     ont.createUser(user)
@@ -442,7 +442,7 @@ def api_create_user():
 
 @app.get('/api/get_user')
 def api_get_user():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _uid = request.args.get('_uid', '')
     print("UiDD: ", _uid)
     data = ont.getUser(_uid)
@@ -457,7 +457,7 @@ def api_get_user():
 
 @app.get('/api/get_attempts')
 def api_get_attempts():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _uid = request.args.get('_uid', '')
     _nameTest = request.args.get('_nameTest', '')
     print("Uid TestName: ", _uid, _nameTest)
@@ -473,7 +473,7 @@ def api_get_attempts():
 
 @app.get('/api/get_last_attempt')
 def api_get_last_attempts():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _uid = request.args.get('_uid', '')
     _nameTest = request.args.get('_nameTest', '')
     print("Uid TestName: ", _uid, _nameTest)
@@ -489,7 +489,7 @@ def api_get_last_attempts():
 
 @app.get('/api/get_user_courses')
 def api_get_user_courses():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _uid = request.args.get('_uid', '')
     print("Uid: ", _uid,)
     data = ont.getUserCourses(_uid)
@@ -504,7 +504,7 @@ def api_get_user_courses():
 
 @app.post('/api/subscribe_course')
 def api_subscribe_course():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('item')
     print("Uid CourseObj: ", _item["uid"], _item["courseObj"])
@@ -519,7 +519,7 @@ def api_subscribe_course():
 
 @app.post('/api/unsubscribe_course')
 def api_unsubscribe_course():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('item')
     print("Uid CourseObj: ", _item["uid"], _item["courseObj"])
@@ -534,7 +534,7 @@ def api_unsubscribe_course():
 
 @app.get('/api/get_course_info')
 def api_get_course_info():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _courseObj = request.args.get('_courseObj', '')
     print("courseObj: ", _courseObj,)
     data = ont.getCourseInfo(_courseObj)
@@ -549,7 +549,7 @@ def api_get_course_info():
 
 @app.get('/api/get_info_term')
 def api_get_info_term():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     termObj = request.args.get('termObj', '')
     print("termObj: ", termObj,)
     data = ont.getInfoByTerm(termObj)
@@ -564,7 +564,7 @@ def api_get_info_term():
 
 @app.post('/api/edit_profile')
 def api_edit_profile():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('user')
     print("User: ", _item)
@@ -579,7 +579,7 @@ def api_edit_profile():
 
 @app.get('/api/get_users')
 def api_get_users():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getUsers()
     print("data: ", data)
     
@@ -592,7 +592,7 @@ def api_get_users():
 
 @app.get('/api/get_users_who_passed_the_test')
 def api_get_users_who_passed_the_test():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _testName = request.args.get('_testName', '')
     print("courseObj: ", _testName,)
     data = ont.getUsersWhoPassedTheTest(_testName)
@@ -608,7 +608,7 @@ def api_get_users_who_passed_the_test():
 '''
 @app.get('/api/get_materials_by_lecture')
 def api_get_materials_by_lecture():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     lectureObj = request.args.get('_lectureObj', '')
     print("lectureObj: ", lectureObj,)
     data = ont.getMaterialsByLecture(lectureObj)
@@ -624,7 +624,7 @@ def api_get_materials_by_lecture():
 
 @app.post('/api/edit_role')
 def api_edit_role():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('user')
     print("User: ", _item)
@@ -639,7 +639,7 @@ def api_edit_role():
 
 @app.post('/api/edit_attempt')
 def api_edit_attempt():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('attempt')
     print("Attempt: ", _item)
@@ -654,7 +654,7 @@ def api_edit_attempt():
 
 @app.post('/api/edit_module')
 def api_edit_module():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _item = request.get_json()
     _item = _item.get('module')
     print("module: ", _item)
@@ -669,7 +669,7 @@ def api_edit_module():
 
 @app.post('/api/create_subject_area')
 def api_create_subject_area():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     nameSubjArea = request.get_json()
     nameSubjArea = nameSubjArea.get('item')
     print("nameSubjArea: ", nameSubjArea)
@@ -684,7 +684,7 @@ def api_create_subject_area():
 
 @app.post('/api/create_term')
 def api_create_term():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     print("item: ", item)
@@ -699,7 +699,7 @@ def api_create_term():
 
 @app.post('/api/update_term')
 def api_update_term():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     print("item: ", item)
@@ -714,7 +714,7 @@ def api_update_term():
 
 @app.post('/api/create_template')
 def api_create_template():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     print("item: ", item)
@@ -729,7 +729,7 @@ def api_create_template():
 
 @app.post('/api/create_lecture')
 def api_create_lecture():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     nameLecture = item["nameLecture"]
@@ -746,7 +746,7 @@ def api_create_lecture():
 
 @app.post('/api/delete_term')
 def api_delete_term():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     nameTerm = item["nameTerm"]
@@ -762,7 +762,7 @@ def api_delete_term():
 
 @app.post('/api/delete_template')
 def api_delete_template():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     tempObj = item["tempObj"]
@@ -778,7 +778,7 @@ def api_delete_template():
 
 @app.post('/api/delete_lecture')
 def api_delete_lecture():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     item = request.get_json()
     item = item.get('item')
     lectureObj = item["lectureObj"]
@@ -795,7 +795,7 @@ def api_delete_lecture():
 
 @app.get('/api/get_terms_by_user')
 def api_get_terms_by_user():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _userObj = request.args.get('_userObj', '')
     _uid = request.args.get('_uid', '')
     print("userObj: ", _userObj, _uid)
@@ -811,7 +811,7 @@ def api_get_terms_by_user():
 
 @app.get('/api/get_subject_areas')
 def api_get_subject_areas():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getSubjectAreas()
     print("data: ", data)
     
@@ -824,7 +824,7 @@ def api_get_subject_areas():
 
 @app.post('/api/get_answers_auto')
 def api_get_answers_auto():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     #_subjectArea = request.args.get('_subjectArea', '')
     #_text = request.args.get('_text', '')
     item = request.get_json()
@@ -842,7 +842,7 @@ def api_get_answers_auto():
 
 @app.get('/api/get_answers_by_templates')
 def api_get_answers_by_templates():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     data = ont.getAnswersByTemplates()
     print("data: ", data)
     
@@ -855,7 +855,7 @@ def api_get_answers_by_templates():
 
 @app.get('/api/get_lectures_by_terms/<terms>')
 def api_get_letures_by_terms(terms):
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     terms = terms.split(',')
     print("TERMS:", terms)
     
@@ -871,7 +871,7 @@ def api_get_letures_by_terms(terms):
 
 @app.get('/api/get_terms_by_subject_area')
 def api_get_terms_by_subject_area():
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     _subjectArea = request.args.get('_subjectArea', '')
     print("subjectArea: ", _subjectArea)
     data = ont.getTermsBySubjArea(_subjectArea)
@@ -890,7 +890,7 @@ def allowed_file(filename):
 
 @app.post('/api/upload_files/<moduleObj>/<selectedTerms>')
 def api_files(moduleObj, selectedTerms):
-    ont = TestingService()
+    ont = TestingService(app.static_folder)
     selectedTerms = selectedTerms.split(',')
     print("SELECTED TERMS:", selectedTerms)
 

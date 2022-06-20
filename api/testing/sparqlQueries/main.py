@@ -23,9 +23,9 @@ class typeTask(Enum):
     TrueFalse = "4"
 
 class TestingService:
-    def __init__(self) -> None:
-        onto_path.append(config['path'])
-        self.path = config['path']
+    def __init__(self, path) -> None:
+        onto_path.append(path)
+        self.path = path
         self.onto = get_ontology(self.path)
         self.onto.load()
         
