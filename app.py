@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, make_response
-#from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.utils import secure_filename
 auth = HTTPBasicAuth()
@@ -22,7 +22,7 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 
 app = Flask(__name__, static_url_path='', static_folder='api/testing/testing_ont.owl')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-#CORS(app)
+CORS(app)
 
 @app.get('/api/pollen/books_by_name')
 def api_get_books_by_name():
