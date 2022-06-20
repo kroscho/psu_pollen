@@ -26,7 +26,6 @@ export default class UserStore {
             { id: "1", name: 'Информация', link: COURSE_INFO_ROUTE },
             { id: "2", name: 'Материалы', link: COURSE_LECTIONS_ROUTE },
             { id: "3", name: 'Тесты', link: COURSE_TESTS_ROUTE },
-            { id: "4", name: 'Литература', link: COURSE_LITERATURE_ROUTE },
             { id: "5", name: 'Концепты', link: COURSE_TERMS_ROUTE },
             { id: "6", name: 'Онтология', link: COURSE_ONTOLOGY_ROUTE },
             { id: "7", name: 'Мои курсы', link: TESTING_COURSES_ROUTE },

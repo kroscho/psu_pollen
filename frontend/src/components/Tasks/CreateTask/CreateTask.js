@@ -4,8 +4,6 @@ import { Form, Input, Button, Space, Switch } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const CreateTask = ({typeQuestion, field}) => {
-  
-    console.log("questionType: ", typeQuestion)
 
     if (typeQuestion === '2' || typeQuestion === '3') {
         return (

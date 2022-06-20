@@ -30,7 +30,7 @@ const CourseLections = () => {
         setIsLoading(true)
         let response = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
         userStore.setCurCourse(response.data)
-        console.log(response.data)
+        //console.log(response.data)
         setIsLoading(false)
     })
 
@@ -54,7 +54,7 @@ const CourseLections = () => {
         let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
         userStore.setCurCourse(response1.data)
         onUpdate()
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     useEffect(() => {
@@ -66,11 +66,11 @@ const CourseLections = () => {
     }
 
     const downloadEmployeeData = (lecture) => {
-        console.log(lecture)
+        //console.log(lecture)
         const url = 'http://localhost:5000/api/dowload_file/' + lecture.lectureName 
         fetch(url)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
@@ -88,7 +88,7 @@ const CourseLections = () => {
     }
 
     const handleCreateLecture = (module) => {
-        console.log(module)
+        //console.log(module)
         setCurModule(module)
         userStore.setCurModule(module);
         setIsCreateLectureFormVisible(true)

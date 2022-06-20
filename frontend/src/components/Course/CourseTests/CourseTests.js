@@ -37,7 +37,7 @@ const CourseTests = () => {
         let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
         userStore.setCurCourse(response1.data)
         onUpdate()
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const onUpdate = () => {
@@ -45,7 +45,7 @@ const CourseTests = () => {
     }
 
     useEffect(() => {
-        console.log("update")
+        //console.log("update")
         onUpdate()
     }, [curCourse])
 

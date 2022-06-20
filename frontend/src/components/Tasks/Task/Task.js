@@ -14,7 +14,6 @@ const Task = ({field, form, tasks}) => {
             questionType = "1" 
         }
     }
-    console.log("questionType: ", questionType)
     if (questionType === SINGLE_TASK_TYPE || questionType === LOGICAL_TASK_TYPE) {
         return <SingleTask field={field} task={tasks[field.key]}></SingleTask>
     }

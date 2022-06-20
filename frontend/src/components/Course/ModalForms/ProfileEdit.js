@@ -20,7 +20,7 @@ const ProfileEdit = ({isVisible, setIsVisible}) => {
         } else {
             userStore.setUser(user);
         }
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const handleOk = () => {
@@ -35,7 +35,7 @@ const ProfileEdit = ({isVisible, setIsVisible}) => {
 
     const onFinish = values => {
         values["uid"] = user.uid
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
         const isEqual = deepEqual(values, user)
         if (!isEqual) {
             userStore.setUser(values);

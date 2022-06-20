@@ -19,7 +19,7 @@ const Courses = (props) => {
     const [fetchCourses, isDataLoading, dataError] = useFetching(async () => {
         let response = await TestingApi.getUserCourses(userStore.User.uid);
         userStore.setMyCourses(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     useEffect(() => {
@@ -42,9 +42,9 @@ const Courses = (props) => {
         setIsCreateCourseFormVisible(true)
     }
 
-    if (history.action === "POP") {
-        console.log("POPOPO")
-    }
+   // if (history.action === "POP") {
+   //     console.log("POPOPO")
+   // }
 
     let listItems = []
 

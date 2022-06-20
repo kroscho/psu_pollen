@@ -36,7 +36,6 @@ const Concepts = ({updatePage}) => {
     }
 
     useEffect(() => {  
-        console.log("EFFECT CONCEPTS")
         fetchSubjectAreas()
     }, [update, updatePage])
 

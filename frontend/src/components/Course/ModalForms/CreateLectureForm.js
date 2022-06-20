@@ -18,10 +18,10 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
 
     const [fetchTerms, isTermsLoading, termsError] = useFetching(async () => {
         setIsLoading(true)
-        console.log(userStore.CurModule)
+        //console.log(userStore.CurModule)
         let response = await TestingApi.getTermsBySubjArea(userStore.CurModule.subjectArea);
         setTerms(response.data)
-        console.log(response.data)
+       // console.log(response.data)
         setIsLoading(false)
     })
 
@@ -75,7 +75,7 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
     }
 
     const handleChange = (value) => {
-        console.log(`selected ${value}`);
+        //console.log(`selected ${value}`);
         setSelectedTerms(value)
     };
 

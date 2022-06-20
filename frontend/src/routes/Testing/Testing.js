@@ -107,9 +107,6 @@ const Testing = () => {
                                 <Route exact path={COURSE_LECTURE_ROUTE}>
                                     <CourseLecture/>
                                 </Route>
-                                <Route exact path={COURSE_LITERATURE_ROUTE}>
-                                    <Courses/>
-                                </Route>
                                 <Route exact path={TESTING_COURSES_ROUTE}>
                                     <Courses/>
                                 </Route>

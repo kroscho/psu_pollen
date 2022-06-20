@@ -23,7 +23,7 @@ const Profile = () => {
         let response = await TestingApi.getUsers();
         setUsers(response.data)
         setFilterUsers(response.data)
-        console.log(response.data)
+       // console.log(response.data)
     })
 
     const handleEditProfile = () => {

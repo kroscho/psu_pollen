@@ -19,10 +19,10 @@ const TermsPage = () => {
     const [fetchTermsByUser, isDataLoading, dataError] = useFetching(async () => {
         let response = await TestingApi.getTermsByUser(user.userObj, user.uid);
         setTerms(response.data)
-        console.log(response.data)
+       // console.log(response.data)
         let response1 = await TestingApi.getSubjectAreas();
         setSubAreas(response1.data)
-        console.log(response1.data)
+       // console.log(response1.data)
     })
 
     useEffect(() => {
@@ -30,11 +30,11 @@ const TermsPage = () => {
     }, [])
 
     const downloadEmployeeData = (lecture) => {
-        console.log(lecture)
+        //console.log(lecture)
         const url = 'http://localhost:5000/api/dowload_file/' + lecture.lectureName 
         fetch(url)
             .then(response => {
-                console.log(response)
+               // console.log(response)
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');

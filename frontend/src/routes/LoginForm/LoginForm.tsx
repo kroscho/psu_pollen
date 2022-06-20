@@ -38,7 +38,7 @@ function LoginForm({ onSubmit }: any) {
       const res = await auth.createUserWithEmailAndPassword(email, password);
       const user = res.user;
       const item = {uid: user?.uid, email: user?.email, firstName: firstName, lastName: lastName}
-      console.log("user: ", item)
+      //console.log("user: ", item)
       fetchCreateUser(item)
     } catch(err) {
       let errMessage = "";

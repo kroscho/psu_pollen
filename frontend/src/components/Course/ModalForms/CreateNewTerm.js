@@ -21,7 +21,7 @@ const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
         setIsLoading(true)
         let response = await TestingApi.getTemplates();
         setTemplates(response.data)
-        console.log(response.data)
+        //console.log(response.data)
         setIsLoading(false)
     }
 
@@ -35,7 +35,7 @@ const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
             item.isMultipleAnswer = false
         }
         item["subjectArea"] = subjectArea
-        console.log("item: ", item)
+        //console.log("item: ", item)
         let response = await TestingApi.CreateTerm(item);
         if (response.data === "ok") {
             message.success('Концепт добавлен успешно');
@@ -50,12 +50,12 @@ const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
     };
 
     const onFinish = values => {
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
         fetchCreateTerm(values)
     };
 
     const handleChangeCheckbox = () => {
-        console.log(isMultipleAnswer)
+        //console.log(isMultipleAnswer)
         setIsMultipleAnswer(!isMultipleAnswer)
     }
 

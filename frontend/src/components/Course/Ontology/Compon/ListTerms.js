@@ -30,18 +30,18 @@ const ListTerms = ({terms, onUpdate, subjectArea}) => {
     const fetchInfoTerm = async (termObj) => {
         setIsLoading(true)
         let response = await TestingApi.getInfoByTerm(termObj);
-        console.log(response.data)
+        //console.log(response.data)
         setIsLoading(false)
     }
 
     const handleInfoTerm = (term) => {
-        console.log(term)
+       // console.log(term)
         setCurTerm(term.term)
         setIsVisibleEditTermForm(true)
     }
 
     const handleDeleteTerm = (term) => {
-        console.log(term)
+        //console.log(term)
         fetchDeleteTerm(term.term)
     }
 

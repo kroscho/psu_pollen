@@ -10,7 +10,7 @@ const { Option } = Select;
 const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
     const {userStore} = useContext(Context)
     const [form] = Form.useForm();
-    console.log("user: ", user)
+  //  console.log("user: ", user)
 
     const [fetchEditRole, isEditLoading, editError] = useFetching(async () => {
         let response = await TestingApi.editRole(userStore.CurNewUser);
@@ -20,7 +20,7 @@ const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
             setIsVisible(false)
         }
         userStore.setCurNewUser({})
-        console.log(response.data)
+    //    console.log(response.data)
     })
 
     useEffect(() => {
@@ -43,14 +43,10 @@ const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
     const onFinish = values => {
         values["uid"] = user.uid
         values["userObj"] = user.userObj
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
         userStore.setCurNewUser(values)
         fetchEditRole()
     };
-
-    const onRoleChange = (value) => {
-        console.log(value)
-    }
 
     return (
         <>
@@ -74,7 +70,6 @@ const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
                     >
                     <Select
                         placeholder="Select a option and change input text above"
-                        onChange={onRoleChange}
                         allowClear
                     >
                         <Option value="student">student</Option>

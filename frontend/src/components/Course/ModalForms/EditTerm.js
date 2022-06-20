@@ -17,16 +17,15 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
    // const [isMultipleAnswer, setIsMultipleAnswer] = useState(false)
     const [curTerm, setCurTerm] = useState({})
     const [form] = Form.useForm();
-    console.log("TERM: ", term)
     const {userStore} = useContext(Context)
 
     const fetchTemplates = async () => {
         setIsLoading(true)
         let response = await TestingApi.getTemplates();
         setTemplates(response.data)
-        console.log(response.data)
+        //console.log(response.data)
         let response1 = await TestingApi.getInfoByTerm(term);
-        console.log(response1.data)
+        //console.log(response1.data)
         setCurTerm(response1.data)
         updateForm(response1.data)
         setIsLoading(false)
@@ -48,7 +47,7 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
     const fetchEditTerm = async (fields) => {
         setIsLoading(true)
         fields["subjectArea"] = subjectArea
-        console.log("item: ", fields)
+        //console.log("item: ", fields)
         let response = await TestingApi.updateTerm(fields);
         if (response.data === "ok") {
             message.success('Концепт обновлен успешно');
@@ -64,7 +63,7 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
 
     const handleChangeCheckBox = () => {
         const fields = form.getFieldsValue();
-        console.log(fields)
+        //console.log(fields)
         setCurTerm(fields)
         form.setFieldsValue({
             nameTerm: fields.nameTerm,
@@ -73,7 +72,7 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
     }
 
     const onFinish = values => {
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
         fetchEditTerm(values)
     };
 

@@ -5,10 +5,6 @@ const MultipleTask = ({task, field}) => {
     
     const numberTask = field.key + 1
 
-    function onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
-    }
-
     const listAnswers = task.answers.map((item, ind) => {
         return (
             <Checkbox key={ind} value={item.answer}>{item.answer}</Checkbox>
@@ -26,7 +22,7 @@ const MultipleTask = ({task, field}) => {
                 },
             ]}
         >
-            <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+            <Checkbox.Group style={{ width: '100%' }}>
                 <Space direction="vertical">
                     {listAnswers}
                 </Space>

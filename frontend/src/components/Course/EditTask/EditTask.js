@@ -12,7 +12,6 @@ const EditTask = ({field, form}) => {
         } else {
             questionType = "1"
         }
-        console.log("questionType: ", questionType)
         if (questionType == "2" || questionType == "3") {
             return (
                 <Form.List name={[field.name, 'answers']}>
@@ -47,7 +46,6 @@ const EditTask = ({field, form}) => {
             return null
         }
     } else {
-        console.log("kroscho")
         return null
     }
 };

@@ -19,7 +19,7 @@ const AttemptsDetails = ({onUpdate, isCheck}) => {
     const curAttempts = userStore.CurAttempts;
 
     const widthForm = window.innerWidth * 0.45
-    console.log(window.innerWidth, widthForm)
+    //console.log(window.innerWidth, widthForm)
     const [form] = Form.useForm();
     let listAttempts = []
 
@@ -29,7 +29,7 @@ const AttemptsDetails = ({onUpdate, isCheck}) => {
             message.success('Попытка проверена успешно');
         }
         onUpdate()
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const handleAttempt = (attempt) => {
@@ -44,7 +44,7 @@ const AttemptsDetails = ({onUpdate, isCheck}) => {
         values["attemptObj"] = curAttempt.attemptObj
         userStore.setCurEditAttempt(values)
         fetchEditAttempt()
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
     };
 
     if (curAttempts) {

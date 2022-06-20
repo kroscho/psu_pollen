@@ -19,7 +19,7 @@ const CheckWorks = () => {
 
     const [fetchUsersWhoPassedTheTest, isDataLoading, dataError] = useFetching(async () => {
         let response = await TestingApi.getUsersWhoPassedTheTest(userStore.CurTest);
-        console.log(response.data)
+        //console.log(response.data)
         setUsersAttempts(response.data)
         setFilterUsers(response.data)
     })
@@ -34,7 +34,7 @@ const CheckWorks = () => {
     }
 
     const handleCheckAttempts = (user) => {
-        console.log("checkUser: ", user)
+        //console.log("checkUser: ", user)
         userStore.setCurAttempts(user.attempts)
         setCurAttempts(user.attempts)
     }

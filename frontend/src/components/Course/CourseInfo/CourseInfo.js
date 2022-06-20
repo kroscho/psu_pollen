@@ -31,7 +31,7 @@ const CourseInfo = () => {
         userStore.setCurCourse(response.data)
         setStudents(response.data.students)
         setModules(response.data.modules)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const [fetchSubscribeCourse, isSubscribeLoading, subscribeError] = useFetching(async () => {

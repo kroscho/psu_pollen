@@ -24,14 +24,14 @@ const CourseTestVariants = () => {
         let response = await TestingApi.getAttempts(userStore.User.uid, userStore.CurTest.testName)
         setAttempts(response.data)
         userStore.setCurAttempts(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const [fetchTest, isTestLoading, testError] = useFetching(async () => {
-        console.log("CurTest: ", userStore.CurTest)
+        //console.log("CurTest: ", userStore.CurTest)
         let response = await TestingApi.getTest(userStore.CurTest.testName)
         userStore.setCurTest(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const CourseTestVariants = () => {
 
     const [fetchDelete, isDeleteLoading, deleteError] = useFetching(async () => {
         let response = await TestingApi.deleteTest(userStore.CurTest);
-        console.log(response.data)
+        //console.log(response.data)
         let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
         userStore.setCurCourse(response1.data)
         userStore.setCurTest({})

@@ -32,7 +32,6 @@ const Templates = ({updatePage}) => {
     }
 
     useEffect(() => {  
-        console.log("EFFECT TEMPL")
         fetchTemplates()
     }, [update, updatePage])
 

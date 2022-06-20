@@ -16,7 +16,7 @@ const OntologyPage = () => {
     const user = userStore.User;
 
     const onChange = (key) => {
-        console.log(key);
+       // console.log(key);
         if (key === "1") {
           setUpdateConcepts(!updateConcepts)
         } else if (key === "2") {

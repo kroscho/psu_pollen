@@ -19,7 +19,6 @@ const SelectTerms = ({isVisible, setIsVisible, updateFormTerms, field, terms}) =
     };
 
     const handleTerm = (term) => {
-        console.log("fieldKey: ", field)
         userStore.setCurFieldKey(field)
         updateFormTerms(term.term)
     }

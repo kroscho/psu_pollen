@@ -22,21 +22,21 @@ const CourseTest = () => {
     const [attempts, setAttempts] = useState([])
     const [isAttemptCompleted, setIsAttemptCompleted] = useState(false)
     let listTasks = []
-    console.log(curTest)
+    //console.log(curTest)
 
     const [fetchAttempt, isAttemptLoading, attemptError] = useFetching(async () => {
         let response = await TestingApi.getResultAttempt(userStore.CurAttempt, userStore.User);
         setResult(response.data)
         fetchAttempts()
         setIsAttemptCompleted(true)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const [fetchAttempts, isAttemptsLoading, attemptsError] = useFetching(async () => {
         let response = await TestingApi.getAttempts(userStore.User.uid, userStore.CurTest.testName)
         setAttempts(response.data)
         userStore.setCurAttempts(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     if (curTest.tasks) {
@@ -56,7 +56,7 @@ const CourseTest = () => {
     const onFinish = values => {
         userStore.setCurAttempt(values)
         fetchAttempt()
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
     };
 
     const View = () => {

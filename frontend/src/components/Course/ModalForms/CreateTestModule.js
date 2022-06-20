@@ -44,13 +44,13 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
         let response = await TestingApi.getTermsBySubjArea(userStore.CurModule.subjectArea);
         setTerms(response.data)
         setFilterTerms(response.data)
-        console.log("terms: ", response.data)
+        //console.log("terms: ", response.data)
         let response1 = await TestingApi.getTemplates();
         setTemplates(response1.data)
-        console.log("templates: ", response1.data)
+        //console.log("templates: ", response1.data)
         let response2 = await TestingApi.getAnswersByTemplates();
         setAnswersByTemplates(response2.data)
-        console.log("answers: ", response2.data)
+        //console.log("answers: ", response2.data)
     })
 
     const [fetchCreate, isCreateLoading, createError] = useFetching(async () => {
@@ -63,14 +63,14 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
         userStore.setCurCourse(response1.data)
         onUpdate()
         setIsVisible(false)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const fetchAnswersAuto = async (template, concepts, fieldKey) => {
         setIsLoading(true)
         const item = {subjectArea: userStore.CurModule.subjectArea, template: template, concepts: concepts}
         let response = await TestingApi.getAnswersAuto(item);
-        console.log(response.data)
+        //console.log(response.data)
         updateFormAnswers(response.data, fieldKey)
         setIsLoading(false)
     }
@@ -84,19 +84,19 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
     const onFinish = values => {
         userStore.setCurTest(values);
         fetchCreate()
-        console.log('Received values of form:', values);
+        //console.log('Received values of form:', values);
     };
 
     const handleChangeType = () => {
         const fields = form.getFieldsValue()
         fields.tasks[0].question = "sssssss dsd"
-        console.log("fields: ", fields)
+        //console.log("fields: ", fields)
         form.setFieldsValue({ fields })
     };
 
     const updateFormAnswers = (data, fieldKey) => {
         //const fieldKey = userStore.СurFieldKey
-        console.log("fieldKey: ", fieldKey)
+        //console.log("fieldKey: ", fieldKey)
         let answersCopy = answers.slice()
         answersCopy[fieldKey] = data
         let fields = form.getFieldsValue()
@@ -104,7 +104,7 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
             if (fields.tasks[fieldKey].type === TEXT_TASK_TYPE || fields.tasks[fieldKey].type === undefined) {
                 fields.tasks[fieldKey].answer = ""
                 for (let item of answersCopy[fieldKey]) {
-                    console.log("item: ", item)
+                   // console.log("item: ", item)
                     fields.tasks[fieldKey].answer += item.answer + ", "
                 }
                 fields.tasks[fieldKey].answer = fields.tasks[fieldKey].answer.substring(0, fields.tasks[fieldKey].answer.length - 2)
@@ -116,7 +116,7 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
             } else {
                 fields.tasks[fieldKey].answers = []
                 for (let item of answersCopy[fieldKey]) {
-                    console.log("item: ", item)
+                   // console.log("item: ", item)
                     fields.tasks[fieldKey].answers.push({answer: item.answer, correct: true})
                 }
                 fields.tasks[fieldKey].type = MULTIPLE_TASK_TYPE
@@ -125,7 +125,7 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
                     tasks: fields.tasks,
                 })
             }
-            console.log(fields)
+           // console.log(fields)
             setAnswers(answersCopy)
         }
     }
@@ -139,7 +139,7 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
     })
 
     const handleGenerateAnswers = (fieldKey) => {
-        console.log("fieldKey: ", fieldKey)
+       // console.log("fieldKey: ", fieldKey)
         const fields = form.getFieldsValue()
         const template = fields.tasks[fieldKey].template
         const concepts = fields.tasks[fieldKey].concepts
@@ -148,7 +148,7 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
     }
 
     const handleChangeTemplate = (option, fieldKey) => {
-        console.log(option, fieldKey)
+       // console.log(option, fieldKey)
         let fields = form.getFieldsValue()
         if (option.value !== "#") {
             fields.tasks[fieldKey].question = option.label.substr(option.label.indexOf('|') + 2)
@@ -173,11 +173,11 @@ const CreateTestForm = ({isVisible, setIsVisible, module, onUpdate}) => {
     }
 
     const handleChange = (value, fieldKey) => {
-        console.log('selected: ', value, fieldKey);
+        //console.log('selected: ', value, fieldKey);
         let fields = form.getFieldsValue()
         for (let i=0; i<value.length; i++) {
             const questionText = fields.tasks[fieldKey].question
-            console.log(questionText)
+          //  console.log(questionText)
             if (questionText !== "" && questionText !== undefined) {
                 fields.tasks[fieldKey].question = questionText.replace("...", value[i])
             } 

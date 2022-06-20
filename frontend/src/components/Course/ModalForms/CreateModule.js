@@ -20,7 +20,7 @@ const CreateModule = ({isVisible, setIsVisible, onUpdate}) => {
     const [fetchSubjectAreas, isDataLoading, dataError] = useFetching(async () => {
         let response = await TestingApi.getSubjectAreas();
         setSubAreas(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     })
 
     const [fetchCreateModule, isCreateLoading, createError] = useFetching(async () => {
@@ -32,7 +32,7 @@ const CreateModule = ({isVisible, setIsVisible, onUpdate}) => {
         let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
         userStore.setCurCourse(response1.data)
         onUpdate()
-        console.log(response.data)
+        //console.log(response.data)
         userStore.setCurModule({})
         setIsVisible(false);
     })
@@ -66,21 +66,6 @@ const CreateModule = ({isVisible, setIsVisible, onUpdate}) => {
         console.log(item)
     };
 
-    const normFile = (e) => {
-        if (e.fileList && e.fileList[0] && e.fileList[0].thumbUrl) {
-            //console.log('Upload event:', e.fileList[0].thumbUrl);
-            setUrl(e.fileList[0].thumbUrl)
-        } else {
-            setUrl("")
-        }
-      
-        if (Array.isArray(e)) {
-          return e;
-        }
-      
-        return e && e.fileList;
-    };
-
     const listAreas = subAreas.map((item) => {
         return (
             <Option key={item.subjectAreaObj} value={item.subjectAreaObj}>{item.subjectArea}</Option>
@@ -99,16 +84,6 @@ const CreateModule = ({isVisible, setIsVisible, onUpdate}) => {
                         <Select placeholder="Select subject area">
                             {listAreas}
                         </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="upload"
-                        label="Загрузить изображение"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                    >
-                        <Upload name="logo" listType="picture">
-                            <Button icon={<UploadOutlined />}>Загрузить фото</Button>
-                        </Upload>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

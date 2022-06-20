@@ -13,7 +13,7 @@ const UsersList = ({onUpdateUsers, isEdit, isCheck, handleCheckAttempts, users})
     const user = userStore.User;
 
     const handleEditRole = (userItem) => {
-        console.log(userItem)
+       // console.log(userItem)
         setUserEdit(userItem)
         setIsEditRoleFormVisible(true)
     }

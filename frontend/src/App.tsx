@@ -40,20 +40,20 @@ const App = () => {
 
   const [fetchCreateUser, isCreateLoading, createError] = useFetching(async () => {
     let response = await TestingApi.createUser(userStore.CurNewUser);
-    console.log(response.data)
+    //console.log(response.data)
   })
 
   const [fetchUser, isUserLoading, userError] = useFetching(async () => {
     let response = await TestingApi.getUser(userStore.CurUID);
     setUser(response.data)
     userStore.setUser(response.data)
-    console.log(response.data)
+    //console.log(response.data)
   })
 
   const handleSignIn = async (email: string, password: string) => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password);
-      console.log("user: ", res.user)
+      //console.log("user: ", res.user)
       userStore.setUID(res.user?.uid)
       fetchUser()
       history.push(MAIN_ROUTE);
@@ -75,7 +75,7 @@ const App = () => {
       if (user?.uid) {
         userObj.uid = user?.uid
       }
-      console.log("user: ", userObj)
+      //console.log("user: ", userObj)
       userStore.setCurNewUser(userObj)
       fetchCreateUser()
       setErrorMessage("")
@@ -96,7 +96,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log(history);
+    //console.log(history);
     auth.onAuthStateChanged((user) => {
       setUser(user);
       setLoading(false);

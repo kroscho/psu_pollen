@@ -13,7 +13,7 @@ const ListTemplates = ({templates, onUpdate}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [userEdit, setUserEdit] = useState({})
     const user = userStore.User;
-    console.log("templates: ", templates)
+    //console.log("templates: ", templates)
 
     const fetchDeleteTemplate = async (tempObj) => {
         setIsLoading(true)
@@ -27,7 +27,7 @@ const ListTemplates = ({templates, onUpdate}) => {
     }
 
     const handleDeleteTemplate = (template) => {
-        console.log(template)
+        //console.log(template)
         fetchDeleteTemplate(template.tempObj)
     }
 
