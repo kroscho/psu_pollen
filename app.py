@@ -19,8 +19,8 @@ from api.testing.sparqlQueries.main import TestingService
 
 UPLOAD_FOLDER = 'api/mobile_agent/api/files'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
-
-app = Flask(__name__, static_url_path='', static_folder='api/testing/testing_ont.owl')
+#api/testing/testing_ont.owl
+app = Flask(__name__, static_url_path='', static_folder='api')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
@@ -910,7 +910,7 @@ def api_files(moduleObj, selectedTerms):
         #filename = secure_filename(file.filename)
         filename = file.filename
         ont.createLecture(filename, moduleObj, selectedTerms)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(app.static_folder, '/mobile_agent/api/files/' + filename))
         response = make_response(json.dumps({
             'statusCode': 200,
             'data': "ok",
@@ -929,7 +929,7 @@ from flask import send_from_directory
 def api_download_file(filename):
     print("FILENAME: ", filename)
 
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.static_folder, '/mobile_agent/api/files/' + filename)
 
 #app.env = 'development'
 

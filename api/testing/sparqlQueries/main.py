@@ -24,8 +24,8 @@ class typeTask(Enum):
 
 class TestingService:
     def __init__(self, path) -> None:
-        onto_path.append(path)
-        self.path = path
+        onto_path.append(path + '/testing/testing_ont.owl')
+        self.path = path + '/testing/testing_ont.owl'
         self.onto = get_ontology(self.path)
         self.onto.load()
         
