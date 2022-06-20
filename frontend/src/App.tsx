@@ -115,12 +115,10 @@ const App = () => {
         return "4";
       case ARCHIVE_ROUTE:
         return "5";
-      case SEARCH_ROUTE:
-        return "6";
       case TESTING_ROUTE:
-        return "7";
+        return "6";
       case PROFILE_ROUTE:
-        return "8";
+        return "7";
       default:
         return "1";
     }
@@ -173,14 +171,6 @@ const App = () => {
               user={user}
               loading={loading}
               component={AddData}
-            />
-
-            <ProtectedRoute
-              exact
-              path={SEARCH_ROUTE}
-              user={user}
-              loading={loading}
-              component={Search}
             />
 
             <ProtectedRoute
