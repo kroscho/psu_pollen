@@ -929,7 +929,7 @@ from flask import send_from_directory
 def api_download_file(filename):
     print("FILENAME: ", filename)
 
-    return send_from_directory(app.static_folder + '/mobile_agent/api/files/' + filename)
+    return send_from_directory(app.static_folder + '/mobile_agent/api/files', filename)
 
 #app.env = 'development'
 
