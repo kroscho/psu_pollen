@@ -1,28 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Input, message } from 'antd';
-import { Context } from '../../..';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
 
 const CreateSubjectArea = ({isVisible, setIsVisible, onUpdate}) => {
-    
-    const [url, setUrl] = useState("")
-    const [subAreas, setSubAreas] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm();
 
-    const {userStore} = useContext(Context)
-
     const fetchCreateSubjectArea = async (nameSubjectArea) => {
         setIsLoading(true)
-        let response = await TestingApi.CreateSubjectArea(nameSubjectArea);
-        if (response.data === "ok") {
-            message.success('Предметная область добавлена успешно');
+        try {
+            let response = await TestingApi.CreateSubjectArea(nameSubjectArea);
+            if (response.data === "ok") {
+                message.success('Предметная область добавлена успешно');
+            }
+            setIsVisible(false);
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        setIsVisible(false);
-        setIsLoading(false);
-        onUpdate()
+        setIsLoading(false)
     }
 
     const handleCancel = () => {
@@ -30,7 +33,7 @@ const CreateSubjectArea = ({isVisible, setIsVisible, onUpdate}) => {
     };
 
     const onFinish = values => {
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         fetchCreateSubjectArea(values.nameSubjectArea)
     };
 

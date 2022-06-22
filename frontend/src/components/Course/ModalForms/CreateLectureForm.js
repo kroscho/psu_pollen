@@ -1,29 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Select, message } from 'antd';
 import axios from "axios";
-import { Context } from '../../..';
-import Loader from '../../UI/Loader/Loader';
-import { useFetching } from '../../hooks/useFetching';
 import TestingApi from '../../../API/TestingApi';
+import { getLocalStorage } from '../../utils/testing';
+import { CUR_MODULE_STORAGE } from '../../../utils/consts';
 
 const { Option } = Select;
 
 const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
-    const {userStore} = useContext(Context)
     const [isLoading, setIsLoading] = useState(false)
     const [terms, setTerms] = useState([])
     const [selectedTerms, setSelectedTerms] = useState([])
     const [files, setFiles] = useState(null)
+    const [form] = Form.useForm();
 
-    const [fetchTerms, isTermsLoading, termsError] = useFetching(async () => {
+    const curModule = getLocalStorage(CUR_MODULE_STORAGE)
+
+    const fetchTerms = async () => {
         setIsLoading(true)
-        //console.log(userStore.CurModule)
-        let response = await TestingApi.getTermsBySubjArea(userStore.CurModule.subjectArea);
-        setTerms(response.data)
-       // console.log(response.data)
+        try {
+            let response = await TestingApi.getTermsBySubjArea(curModule.subjectArea);
+            setTerms(response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
         setIsLoading(false)
-    })
+    }
 
     const fetchCreateLecture = async () => {
         setIsLoading(true)
@@ -33,7 +41,7 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
                 let formData = new FormData();
                 formData.append("file", element);
                 formData.append("name", "Name");
-                const url ="https://psu-pollen.herokuapp.com/api/upload_files/" + userStore.CurModule.moduleObj + "/" + selectedTerms
+                const url ="http://localhost:5000/api/upload_files/" + curModule.moduleObj + "/" + selectedTerms
                 axios({
                     url: url,
                     method: "POST",
@@ -63,8 +71,6 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
         setIsVisible(false);
     };
 
-    const [form] = Form.useForm();
-
     const onFinish = values => {
         console.log('Received values of form:', values);
     };
@@ -75,7 +81,6 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
     }
 
     const handleChange = (value) => {
-        //console.log(`selected ${value}`);
         setSelectedTerms(value)
     };
 
@@ -137,32 +142,6 @@ const CreateLectureForm = ({isVisible, setIsVisible, onUpdate}) => {
             </>
         );
     };
-    }
-
-    /*
-    return (
-            <Modal 
-            title="Создание лекции" 
-            visible={isVisible}  
-            onCancel={handleCancel}
-            footer={[
-                <Button key="back" onClick={handleCancel}>
-                    Отмена
-                </Button>
-                ]}    
-            >
-                <Form form={form} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-                    <Form.Item name="nameLecture" label="Название лекции" rules={[{ required: true, message: 'Не заполнено название лекции' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                        Добавить
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-        );
-};*/
+}
 
 export default CreateLectureForm;

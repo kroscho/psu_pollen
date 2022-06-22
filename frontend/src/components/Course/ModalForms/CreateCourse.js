@@ -3,7 +3,6 @@ import 'antd/dist/antd.css';
 import { Modal, Button, Form, Input, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import TestingApi from '../../../API/TestingApi';
-import { useFetching } from '../../hooks/useFetching';
 import { Context } from '../../..';
 
 const layout = {
@@ -25,22 +24,31 @@ const CreateCourse = ({isVisible, setIsVisible, update, setUpdate}) => {
     
     const [url, setUrl] = useState("")
     const [form] = Form.useForm();
+    const [isLoading, setIsLoading] = useState(false)
     const {userStore} = useContext(Context)
 
-    const [fetchCreateCourse, isCreateLoading, createError] = useFetching(async () => {
-        let response = await TestingApi.createCourse(userStore.CurNewCourse);
-        //console.log(response)
-        if (response.data === "ok") {
-            message.success('Курс создан успешно');
-        } else {
-            message.error(createError);
+    const fetchCreateCourse = async (course) => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.createCourse(course);
+            if (response.data === "ok") {
+                message.success('Курс создан успешно');
+            }
+            userStore.setCurTest({})
+            if (update) {
+                setUpdate(!update)
+            }
+            setIsVisible(false)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error("Курс с таким названием существует")
         }
-        userStore.setCurTest({})
-        if (update) {
-            setUpdate(!update)
-        }
-        setIsVisible(false)
-    })
+        setIsLoading(false)
+    }
 
     const handleOk = () => {
         setIsVisible(false);
@@ -53,7 +61,7 @@ const CreateCourse = ({isVisible, setIsVisible, update, setUpdate}) => {
     const onReset = () => {
         form.resetFields();
     };
-    
+
     const onFill = () => {
         form.setFieldsValue({
           name: 'Курс1',
@@ -63,7 +71,7 @@ const CreateCourse = ({isVisible, setIsVisible, update, setUpdate}) => {
     };
 
     const onFinish = values => {
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         const item = {
             title: values.name,
             description: values.description,
@@ -72,9 +80,7 @@ const CreateCourse = ({isVisible, setIsVisible, update, setUpdate}) => {
             students: [],
             modules: [],
         }
-        userStore.setCurNewCourse(item)
-        fetchCreateCourse()
-        //console.log(item)
+        fetchCreateCourse(item)
     };
 
     return (

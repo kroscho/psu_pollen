@@ -1,27 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Input, message, Select } from 'antd';
-import { Context } from '../../..';
-import { useFetching } from '../../hooks/useFetching';
 import TestingApi from '../../../API/TestingApi';
 
 const { Option } = Select;
 
 const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
-    const {userStore} = useContext(Context)
     const [form] = Form.useForm();
-  //  console.log("user: ", user)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const [fetchEditRole, isEditLoading, editError] = useFetching(async () => {
-        let response = await TestingApi.editRole(userStore.CurNewUser);
-        if (response.data === "ok") {
-            message.success('Роль пользователя изменена успешно');
-            onUpdateUsers()
-            setIsVisible(false)
+    const fetchEditRole = async (userr) => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.editRole(userr);
+            if (response.data === "ok") {
+                message.success('Роль пользователя изменена успешно');
+                onUpdateUsers()
+                setIsVisible(false)
+            }
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        userStore.setCurNewUser({})
-    //    console.log(response.data)
-    })
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         form.setFieldsValue({
@@ -43,10 +49,13 @@ const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
     const onFinish = values => {
         values["uid"] = user.uid
         values["userObj"] = user.userObj
-        //console.log('Received values of form:', values);
-        userStore.setCurNewUser(values)
-        fetchEditRole()
+        console.log('Received values of form:', values);
+        fetchEditRole(values)
     };
+
+    const onRoleChange = (value) => {
+        console.log(value)
+    }
 
     return (
         <>
@@ -70,6 +79,7 @@ const RoleEdit = ({onUpdateUsers, user, isVisible, setIsVisible}) => {
                     >
                     <Select
                         placeholder="Select a option and change input text above"
+                        onChange={onRoleChange}
                         allowClear
                     >
                         <Option value="student">student</Option>

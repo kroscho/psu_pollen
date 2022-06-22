@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Input, message } from 'antd';
-import { Context } from '../../..';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
 
@@ -10,17 +9,24 @@ const CreateTemplate = ({isVisible, setIsVisible, onUpdate}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm();
 
-    const {userStore} = useContext(Context)
-
     const fetchCreateTemplate = async (item) => {
         setIsLoading(true)
-        let response = await TestingApi.CreateTemplate(item);
-        if (response.data === "ok") {
-            message.success('Шаблон добавлен успешно');
+        try {
+            let response = await TestingApi.CreateTemplate(item);
+            if (response.data === "ok") {
+                message.success('Шаблон добавлен успешно');
+            }
+            setIsVisible(false);
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        setIsVisible(false);
         setIsLoading(false)
-        onUpdate()
     }
 
     const handleCancel = () => {
@@ -28,7 +34,7 @@ const CreateTemplate = ({isVisible, setIsVisible, onUpdate}) => {
     };
 
     const onFinish = values => {
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         fetchCreateTemplate(values)
     };
 

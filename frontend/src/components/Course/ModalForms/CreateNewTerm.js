@@ -1,27 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Modal, Button, Form, Input, message, Select, Checkbox, Space } from 'antd';
-import { Context } from '../../..';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
 
 const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
-    
-    const [url, setUrl] = useState("")
-    const [subAreas, setSubAreas] = useState([])
     const [templates, setTemplates] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isMultipleAnswer, setIsMultipleAnswer] = useState(false)
     const [form] = Form.useForm();
 
-    const {userStore} = useContext(Context)
-
     const fetchTemplates = async () => {
         setIsLoading(true)
-        let response = await TestingApi.getTemplates();
-        setTemplates(response.data)
-        //console.log(response.data)
+        try {
+            let response = await TestingApi.getTemplates();
+            setTemplates(response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
         setIsLoading(false)
     }
 
@@ -35,7 +37,6 @@ const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
             item.isMultipleAnswer = false
         }
         item["subjectArea"] = subjectArea
-        //console.log("item: ", item)
         let response = await TestingApi.CreateTerm(item);
         if (response.data === "ok") {
             message.success('Концепт добавлен успешно');
@@ -50,12 +51,11 @@ const CreateTerm = ({isVisible, setIsVisible, subjectArea, onUpdate}) => {
     };
 
     const onFinish = values => {
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         fetchCreateTerm(values)
     };
 
     const handleChangeCheckbox = () => {
-        //console.log(isMultipleAnswer)
         setIsMultipleAnswer(!isMultipleAnswer)
     }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Button, Menu } from "antd";
+import { Layout, Button, Menu, message } from "antd";
 import "antd/dist/antd.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import MainPage from "./routes/MainPage";
@@ -17,10 +17,10 @@ import Archive from "./routes/Archive/Archive";
 import Allergens from "./routes/Allergens/Allergens";
 import Profile from "./routes/Profile/Profile"
 import Testing from "./routes/Testing/Testing";
-import { ADD_ROUTE, ALLERGENS_ROUTE, ARCHIVE_ROUTE, COURSE_INFO_ROUTE, COURSE_LECTIONS_ROUTE, COURSE_LECTURE_ROUTE, COURSE_LITERATURE_ROUTE, COURSE_ONTOLOGY_ROUTE, COURSE_TERMS_ROUTE, COURSE_TESTS_ROUTE, COURSE_TESTS_TEST_EDIT_ROUTE, COURSE_TESTS_TEST_ROUTE, COURSE_TESTS_TEST_VARIANTS_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, SEARCH_ROUTE, TESTING_ALL_COURSES_ROUTE, TESTING_COURSES_ROUTE, TESTING_ROUTE, TESTS_TEST_ATTEMPTS_DETAILS_ROUTE, TESTS_TEST_ATTEMPT_ROUTE, TESTS_TEST_CHECK_WORKS_ROUTE, VIEW_ROUTE } from "./utils/consts";
+import { ADD_ROUTE, ALLERGENS_ROUTE, ARCHIVE_ROUTE, COURSE_INFO_ROUTE, COURSE_LECTIONS_ROUTE, COURSE_LECTURE_ROUTE, COURSE_LITERATURE_ROUTE, COURSE_ONTOLOGY_ROUTE, COURSE_TERMS_ROUTE, COURSE_TESTS_ROUTE, COURSE_TESTS_TEST_EDIT_ROUTE, COURSE_TESTS_TEST_ROUTE, COURSE_TESTS_TEST_VARIANTS_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, SEARCH_ROUTE, TESTING_ALL_COURSES_ROUTE, TESTING_COURSES_ROUTE, TESTING_ROUTE, TESTS_TEST_ATTEMPTS_DETAILS_ROUTE, TESTS_TEST_ATTEMPT_ROUTE, TESTS_TEST_CHECK_WORKS_ROUTE, USER_STORAGE, VIEW_ROUTE } from "./utils/consts";
 import { Context } from ".";
 import TestingApi from "./API/TestingApi";
-import { useFetching } from "./components/hooks/useFetching";
+import { setLocalStorage } from "./components/utils/testing";
 
 const { Header, Footer, Content } = Layout;
 
@@ -36,26 +36,45 @@ const App = () => {
   const [user, setUser] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string>("")
   const [loading, setLoading] = useState(true);
-  const {services, userStore} = useContext(Context);
+  const [isLoading, setIsLoading] = useState(false)
+  const {services} = useContext(Context);
 
-  const [fetchCreateUser, isCreateLoading, createError] = useFetching(async () => {
-    let response = await TestingApi.createUser(userStore.CurNewUser);
-    //console.log(response.data)
-  })
+  const fetchCreateUser = async (user:any) => {
+    setIsLoading(true)
+    try {
+      let response = await TestingApi.createUser(user);
+    } catch (err) {
+      let errMessage = "";
+      if (err instanceof Error) {
+        errMessage = err.message;
+      }
+      console.log(errMessage);
+      message.error(errMessage)
+    }
+    setIsLoading(false)
+  }
 
-  const [fetchUser, isUserLoading, userError] = useFetching(async () => {
-    let response = await TestingApi.getUser(userStore.CurUID);
-    setUser(response.data)
-    userStore.setUser(response.data)
-    //console.log(response.data)
-  })
+  const fetchUser = async (uid:any) => {
+    setIsLoading(true)
+    try {
+      let response = await TestingApi.getUser(uid);
+      setUser(response.data)
+      setLocalStorage(USER_STORAGE, response.data)
+    } catch (err) {
+      let errMessage = "";
+      if (err instanceof Error) {
+        errMessage = err.message;
+      }
+      console.log(errMessage);
+      message.error(errMessage)
+    }
+    setIsLoading(false)
+  }
 
   const handleSignIn = async (email: string, password: string) => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password);
-      //console.log("user: ", res.user)
-      userStore.setUID(res.user?.uid)
-      fetchUser()
+      fetchUser(res.user?.uid)
       history.push(MAIN_ROUTE);
       setErrorMessage("")
     } catch (err) {
@@ -64,27 +83,7 @@ const App = () => {
         errMessage = err.message;
       }
       console.log(errMessage);
-      setErrorMessage(errMessage)
-    }
-  };
-
-  const handleRegIn = async (userObj:User) => {
-    try {
-      const res = await auth.createUserWithEmailAndPassword(userObj.email, userObj.password);
-      const user = res.user;
-      if (user?.uid) {
-        userObj.uid = user?.uid
-      }
-      //console.log("user: ", userObj)
-      userStore.setCurNewUser(userObj)
-      fetchCreateUser()
-      setErrorMessage("")
-    } catch(err) {
-      let errMessage = "";
-      if (err instanceof Error) {
-        errMessage = err.message;
-      }
-      console.log(errMessage);
+      message.error("Логин или пароль введены неверно")
       setErrorMessage(errMessage)
     }
   };
@@ -96,7 +95,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    //console.log(history);
     auth.onAuthStateChanged((user) => {
       setUser(user);
       setLoading(false);
@@ -115,10 +113,12 @@ const App = () => {
         return "4";
       case ARCHIVE_ROUTE:
         return "5";
-      case TESTING_ROUTE:
+      case SEARCH_ROUTE:
         return "6";
-      case PROFILE_ROUTE:
+      case TESTING_ROUTE:
         return "7";
+      case PROFILE_ROUTE:
+        return "8";
       default:
         return "1";
     }
@@ -171,6 +171,14 @@ const App = () => {
               user={user}
               loading={loading}
               component={AddData}
+            />
+
+            <ProtectedRoute
+              exact
+              path={SEARCH_ROUTE}
+              user={user}
+              loading={loading}
+              component={Search}
             />
 
             <ProtectedRoute
@@ -254,22 +262,6 @@ const App = () => {
               loading={loading}
               component={Testing}
             />    
-
-            <ProtectedRoute
-              exact
-              path={COURSE_LECTURE_ROUTE}
-              user={user}
-              loading={loading}
-              component={Testing}
-            />     
-
-            <ProtectedRoute
-              exact
-              path={COURSE_LITERATURE_ROUTE}
-              user={user}
-              loading={loading}
-              component={Testing}
-            />   
 
             <ProtectedRoute
               exact

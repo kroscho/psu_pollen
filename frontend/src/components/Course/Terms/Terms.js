@@ -1,40 +1,48 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
-import { Collapse, Divider, List  } from "antd";
-import { Context } from "../../..";
-import {Row, Col, ListGroup, Button } from "react-bootstrap"
+import { Collapse, Divider, List, message  } from "antd";
+import {Row, Col, Button } from "react-bootstrap"
 import { FormOutlined } from '@ant-design/icons';
 import TestingApi from "../../../API/TestingApi";
-import { useFetching } from "../../hooks/useFetching";
 import Loader from "../../UI/Loader/Loader";
 import ErrorMessage from "../../UI/Messages/ErrorMessage";
+import { getLocalStorage } from "../../utils/testing";
+import { USER_STORAGE } from "../../../utils/consts";
 const { Panel } = Collapse;
 
 const TermsPage = () => {
-    const {userStore} = useContext(Context)
     const [subAreas, setSubAreas] = useState([])
     const [terms, setTerms] = useState({})
-    const user = userStore.User;
+    const [isLoading, setIsLoading] = useState(false)
+    
+    const user = getLocalStorage(USER_STORAGE);
 
-    const [fetchTermsByUser, isDataLoading, dataError] = useFetching(async () => {
-        let response = await TestingApi.getTermsByUser(user.userObj, user.uid);
-        setTerms(response.data)
-       // console.log(response.data)
-        let response1 = await TestingApi.getSubjectAreas();
-        setSubAreas(response1.data)
-       // console.log(response1.data)
-    })
+    const fetchTermsByUser = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getTermsByUser(user.userObj, user.uid);
+            setTerms(response.data)
+            let response1 = await TestingApi.getSubjectAreas();
+            setSubAreas(response1.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         fetchTermsByUser()
     }, [])
 
     const downloadEmployeeData = (lecture) => {
-        //console.log(lecture)
-        const url = 'https://psu-pollen.herokuapp.com/dowload_file/' + lecture.lectureName 
+        const url = 'https://psu-pollen.herokuapp.com/api/dowload_file/' + lecture.lectureName 
         fetch(url)
             .then(response => {
-               // console.log(response)
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
@@ -187,14 +195,13 @@ const TermsPage = () => {
         )
     }
 
-    const spinner = isDataLoading ? <Loader/> : null;
-    const errorMessage = dataError ? <ErrorMessage message={dataError} /> : null;
-    const content = !(isDataLoading || dataError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = dataError ? <ErrorMessage message={dataError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

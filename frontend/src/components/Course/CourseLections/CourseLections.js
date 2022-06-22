@@ -1,24 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
 import { Divider, message } from "antd";
-import { Context } from "../../..";
 import {Row, Col, ListGroup, Button} from "react-bootstrap"
-import { isAdmin } from "../../utils/testing";
+import { getLocalStorage, isAdmin, setLocalStorage } from "../../utils/testing";
 import { FormOutlined } from '@ant-design/icons';
 import CreateModule from "../ModalForms/CreateModule";
 import CreateLectureForm from "../ModalForms/CreateLectureForm";
 import TestingApi from "../../../API/TestingApi";
-import { useFetching } from "../../hooks/useFetching";
 import Loader from "../../UI/Loader/Loader";
+import { CUR_COURSE_STORAGE, CUR_MODULE_STORAGE, USER_STORAGE } from "../../../utils/consts";
 
 const CourseLections = () => {
-    const {userStore} = useContext(Context)
-    const curCourse = userStore.CurCourse;
     const [dataFile, setDataFile] = useState("")
-    const [curModule, setCurModule] = useState(userStore.CurModule)
     const [isLoading, setIsLoading] = useState(false)
     const [update, setUpdate] = useState(true)
-    const user = userStore.User;
+    
+    const user = getLocalStorage(USER_STORAGE);
+    const curCourse = getLocalStorage(CUR_COURSE_STORAGE)
 
     const [isCreateLectureFormVisible, setIsCreateLectureFormVisible] = useState(false)
     const [isCreateModuleFormVisible, setIsCreateModuleFormVisible] = useState(false)
@@ -26,36 +24,63 @@ const CourseLections = () => {
     let listLectures = []
     let listModules = []
 
-    const [fetchCourseInfo, isDataLoading, dataError] = useFetching(async () => {
+    const fetchCourseInfo = async () => {
         setIsLoading(true)
-        let response = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-        userStore.setCurCourse(response.data)
-        //console.log(response.data)
-        setIsLoading(false)
-    })
-
-    const fetchDeleteLecture = async (lecture, module) => {
-        setIsLoading(true)
-        const item = {lectureObj: lecture.lectureObj, moduleObj: module.moduleObj}
-        let response = await TestingApi.DeleteLecture(item);
-        if (response.data === "ok") {
-            message.success('Материал удален успешно');
+        try {
+            let response = await TestingApi.getCourseInfo(curCourse.courseObj);
+            setLocalStorage(CUR_COURSE_STORAGE, response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        onUpdate()
         setIsLoading(false)
     }
 
-    const [fetchDeleteModule, isdeleteLoading, deleteError] = useFetching(async () => {
-        const item = {moduleObj: userStore.CurModule.moduleObj, courseObj: userStore.CurCourse.courseObj}
-        let response = await TestingApi.deleteModule(item);
-        if (response.data === "ok") {
-            message.success('Модуль удален успешно');
+    const fetchDeleteLecture = async (lecture, module) => {
+        setIsLoading(true)
+        try {
+            const item = {lectureObj: lecture.lectureObj, moduleObj: module.moduleObj}
+            let response = await TestingApi.DeleteLecture(item);
+            if (response.data === "ok") {
+                message.success('Материал удален успешно');
+            }
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-        userStore.setCurCourse(response1.data)
-        onUpdate()
-        //console.log(response.data)
-    })
+        setIsLoading(false)
+    }
+
+    const fetchDeleteModule = async (module) => {
+        setIsLoading(true)
+        try {
+            const item = {moduleObj: module.moduleObj, courseObj: curCourse.courseObj}
+            let response = await TestingApi.deleteModule(item);
+            if (response.data === "ok") {
+                message.success('Модуль удален успешно');
+            }
+            let response1 = await TestingApi.getCourseInfo(curCourse.courseObj);
+            setLocalStorage(CUR_COURSE_STORAGE, response1.data)
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         fetchCourseInfo()
@@ -66,11 +91,9 @@ const CourseLections = () => {
     }
 
     const downloadEmployeeData = (lecture) => {
-        //console.log(lecture)
         const url = 'https://psu-pollen.herokuapp.com/api/dowload_file/' + lecture.lectureName 
         fetch(url)
             .then(response => {
-                //console.log(response)
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
@@ -83,14 +106,11 @@ const CourseLections = () => {
     }
 
     const handleDeleteModule = (module) => {
-        userStore.setCurModule(module);
-        fetchDeleteModule()
+        fetchDeleteModule(module)
     }
 
     const handleCreateLecture = (module) => {
-        //console.log(module)
-        setCurModule(module)
-        userStore.setCurModule(module);
+        setLocalStorage(CUR_MODULE_STORAGE, module)
         setIsCreateLectureFormVisible(true)
     }
 
@@ -134,7 +154,7 @@ const CourseLections = () => {
             })
         }
 
-        listModules = curCourse.modules.map((item, index) => {
+        listModules = curCourse.modules.map((item) => {
             return (
                 <ListGroup.Item 
                     as="li"
@@ -168,7 +188,7 @@ const CourseLections = () => {
                             </Button>
                         : null
                     }
-                    <CreateLectureForm isVisible={isCreateLectureFormVisible} setIsVisible={setIsCreateLectureFormVisible} module={curModule} onUpdate={onUpdate}></CreateLectureForm>                
+                    <CreateLectureForm isVisible={isCreateLectureFormVisible} setIsVisible={setIsCreateLectureFormVisible} onUpdate={onUpdate}></CreateLectureForm>                
                 </ListGroup.Item>
             )
         })

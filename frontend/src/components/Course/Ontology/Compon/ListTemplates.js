@@ -1,33 +1,38 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
-import { Avatar, Button, Divider, List, message, Skeleton } from "antd";
+import { Avatar, Button, Divider, List, message } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { isAdmin } from "../../../utils/testing";
-import { Context } from "../../../..";
+import { getLocalStorage, isAdmin } from "../../../utils/testing";
 import Loader from "../../../UI/Loader/Loader";
 import TestingApi from "../../../../API/TestingApi";
+import { USER_STORAGE } from "../../../../utils/consts";
 
 const ListTemplates = ({templates, onUpdate}) => {
-    const {userStore} = useContext(Context)
-    const [isEditRoleFormVisible, setIsEditRoleFormVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [userEdit, setUserEdit] = useState({})
-    const user = userStore.User;
-    //console.log("templates: ", templates)
+    
+    const user = getLocalStorage(USER_STORAGE);
 
     const fetchDeleteTemplate = async (tempObj) => {
         setIsLoading(true)
-        const item = {tempObj: tempObj}
-        let response = await TestingApi.DeleteTemplate(item);
-        if (response.data === "ok") {
-            message.success('Шаблон удален успешно');
+        try {
+            const item = {tempObj: tempObj}
+            let response = await TestingApi.DeleteTemplate(item);
+            if (response.data === "ok") {
+                message.success('Шаблон удален успешно');
+            }
+            setIsLoading(false)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
         setIsLoading(false)
-        onUpdate()
     }
 
     const handleDeleteTemplate = (template) => {
-        //console.log(template)
         fetchDeleteTemplate(template.tempObj)
     }
 

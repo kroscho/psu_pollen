@@ -2,35 +2,43 @@ import React, { useContext, useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { ListGroup, Row, Col, Button } from 'react-bootstrap';
 import { Context } from '../../index';
-import { Divider, Avatar } from "antd";
+import { Divider, Avatar, message } from "antd";
 import history from "../../services/history";
-import { isAdmin } from '../utils/testing';
+import { getLocalStorage, isAdmin, setLocalStorage } from '../utils/testing';
 import CreateCourse from '../Course/ModalForms/CreateCourse';
-import { COURSE_INFO_ROUTE, TESTING_ALL_COURSES_ROUTE } from '../../utils/consts';
+import { COURSE_INFO_ROUTE, CUR_COURSE_STORAGE, MY_COURSES_STORAGE, TESTING_ALL_COURSES_ROUTE, USER_STORAGE } from '../../utils/consts';
 import TestingApi from '../../API/TestingApi';
-import { useFetching } from '../hooks/useFetching';
 import Loader from '../UI/Loader/Loader';
-import ErrorMessage from '../UI/Messages/ErrorMessage';
 
-const Courses = (props) => {
+const Courses = () => {
     const [isCreateCourseFormVisible, setIsCreateCourseFormVisible] = useState(false)
-    const {userStore} = useContext(Context)
+    const [isLoading, setIsLoading] = useState(false)
+    const [myCourses, setMyCourses] = useState([])
+    const user = getLocalStorage(USER_STORAGE)
 
-    const [fetchCourses, isDataLoading, dataError] = useFetching(async () => {
-        let response = await TestingApi.getUserCourses(userStore.User.uid);
-        userStore.setMyCourses(response.data)
-        //console.log(response.data)
-    })
+    const fetchCourses = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getUserCourses(user.uid);
+            setMyCourses(response.data)
+            setLocalStorage(MY_COURSES_STORAGE, response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         fetchCourses()
     }, [])
-    
-    const data = userStore.MyCourses
-    const user = userStore.User;
 
     const handleCourse = (item) => {
-        userStore.setCurCourse(item);
+        setLocalStorage(CUR_COURSE_STORAGE, item)
         history.push(COURSE_INFO_ROUTE);
     }
 
@@ -48,8 +56,8 @@ const Courses = (props) => {
 
     let listItems = []
 
-    if (data) {
-        listItems = data.map((item, index) => {
+    if (myCourses) {
+        listItems = myCourses.map((item, index) => {
             return (
                 <ListGroup.Item 
                     className="d-flex justify-content-between align-items-start"
@@ -90,14 +98,13 @@ const Courses = (props) => {
         )
     }
 
-    const spinner = isDataLoading ? <Loader/> : null;
-    const errorMessage = dataError ? <ErrorMessage message={dataError} /> : null;
-    const content = !(isDataLoading || dataError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = dataError ? <ErrorMessage message={dataError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

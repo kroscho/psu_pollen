@@ -38,8 +38,9 @@ export default class UserStore {
             { id: "3", name: 'Добавление', link: ADD_ROUTE },
             { id: "4", name: 'Мониторинг', link: VIEW_ROUTE },
             { id: "5", name: 'Архив', link: ARCHIVE_ROUTE },
-            { id: "6", name: 'Тестирование', link: TESTING_COURSES_ROUTE },
-            { id: "7", name: 'Профиль', link: PROFILE_ROUTE },
+            { id: "6", name: 'Поиск', link: SEARCH_ROUTE },
+            { id: "7", name: 'Тестирование', link: TESTING_COURSES_ROUTE },
+            { id: "8", name: 'Профиль', link: PROFILE_ROUTE },
         ]
 
         this._routes = {
@@ -65,10 +66,6 @@ export default class UserStore {
             "/course/ontology": [
                 {path: TESTING_COURSES_ROUTE, title: "Мои курсы", active: false}, 
                 {path: COURSE_TERMS_ROUTE, title: "Онтология", active: true},
-            ],
-            "/course/literature": [
-                {path: TESTING_COURSES_ROUTE, title: "Мои курсы", active: false}, 
-                {path: COURSE_LITERATURE_ROUTE, title: "Литература", active: true},
             ],
             "/course/tests/test/variants": [
                 {path: TESTING_COURSES_ROUTE, title: "Мои курсы", active: false}, 

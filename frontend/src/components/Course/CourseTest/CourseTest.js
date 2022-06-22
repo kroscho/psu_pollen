@@ -1,43 +1,61 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import 'antd/dist/antd.css';
-import { Context } from "../../..";
 import { Button} from "react-bootstrap"
-import { Col, Divider, Form, Row, Space } from "antd";
+import { Col, Divider, Form, message, Row } from "antd";
 import SingleTask from "../../Tasks/Single/SingleTask";
 import MultipleTask from "../../Tasks/Multiple/MultipleTask";
 import TextTask from "../../Tasks/Text/TextTask";
-import { LOGICAL_TASK_TYPE, MULTIPLE_TASK_TYPE, SINGLE_TASK_TYPE } from "../../../utils/consts";
+import { CUR_ATTEMPTS_STORAGE, CUR_TEST_STORAGE, LOGICAL_TASK_TYPE, MULTIPLE_TASK_TYPE, SINGLE_TASK_TYPE, USER_STORAGE } from "../../../utils/consts";
 import Task from "../../Tasks/Task/Task";
-import { useFetching } from "../../hooks/useFetching";
 import TestingApi from "../../../API/TestingApi";
 import Loader from "../../UI/Loader/Loader";
 import AttemptsDetails from "../AttemptsDetails/AttemptsDetails";
+import { getLocalStorage, setLocalStorage } from "../../utils/testing";
 
 const CourseTest = () => {
-    const {userStore} = useContext(Context)
-    const [answers, setAnswers] = useState({})
-    const curTest = userStore.CurTest;
     const [form] = Form.useForm();
     const [result, setResult] = useState({})
-    const [attempts, setAttempts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
     const [isAttemptCompleted, setIsAttemptCompleted] = useState(false)
     let listTasks = []
-    //console.log(curTest)
+    
+    const user = getLocalStorage(USER_STORAGE);
+    const curTest = getLocalStorage(CUR_TEST_STORAGE)
 
-    const [fetchAttempt, isAttemptLoading, attemptError] = useFetching(async () => {
-        let response = await TestingApi.getResultAttempt(userStore.CurAttempt, userStore.User);
-        setResult(response.data)
-        fetchAttempts()
-        setIsAttemptCompleted(true)
-        //console.log(response.data)
-    })
+    const fetchAttempt = async (attempt) => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getResultAttempt(attempt, user);
+            setResult(response.data)
+            fetchAttempts()
+            setIsAttemptCompleted(true)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
-    const [fetchAttempts, isAttemptsLoading, attemptsError] = useFetching(async () => {
-        let response = await TestingApi.getAttempts(userStore.User.uid, userStore.CurTest.testName)
-        setAttempts(response.data)
-        userStore.setCurAttempts(response.data)
-        //console.log(response.data)
-    })
+    const fetchAttempts = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getAttempts(user.uid, curTest.testName)
+            setLocalStorage(CUR_ATTEMPTS_STORAGE, response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     if (curTest.tasks) {
         listTasks = curTest.tasks.map((item, ind) => {
@@ -54,9 +72,8 @@ const CourseTest = () => {
     }
 
     const onFinish = values => {
-        userStore.setCurAttempt(values)
-        fetchAttempt()
-        //console.log('Received values of form:', values);
+        fetchAttempt(values)
+        console.log('Received values of form:', values);
     };
 
     const View = () => {
@@ -64,6 +81,7 @@ const CourseTest = () => {
             return (
                 <Form
                     style={{margin: "0 20%"}}
+                    name="dynamic_form_nest_item"
                     form={form}
                     layout="vertical"
                     onFinish={onFinish} 
@@ -121,8 +139,8 @@ const CourseTest = () => {
         }
     }
 
-    const spinner = isAttemptLoading ? <Loader/> : null;
-    const content = !(isAttemptLoading || attemptError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>

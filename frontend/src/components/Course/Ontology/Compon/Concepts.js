@@ -1,18 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
-import { Button, Form, Input, Select  } from "antd";
+import { Button, Form, Input, message, Select  } from "antd";
 import TestingApi from "../../../../API/TestingApi";
 import Loader from "../../../UI/Loader/Loader";
 import CreateSubjectArea from "../../ModalForms/CreateNewSubjectArea";
-import { isAdmin } from "../../../utils/testing";
+import { getLocalStorage, isAdmin } from "../../../utils/testing";
 import { UserOutlined } from '@ant-design/icons';
 import CreateTerm from "../../ModalForms/CreateNewTerm";
 import ListTerms from "./ListTerms";
-import { Context } from "../../../..";
-import EditTerm from "../../ModalForms/EditTerm";
+import { CUR_COURSE_STORAGE, USER_STORAGE } from "../../../../utils/consts";
 
 const Concepts = ({updatePage}) => {
-    const {userStore} = useContext(Context)
+    const [form] = Form.useForm();
     const [subAreas, setSubAreas] = useState([])
     const [curSubjectArea, setCursubjectArea] = useState("")
     const [curTerms, setCurTerms] = useState([])
@@ -22,16 +21,24 @@ const Concepts = ({updatePage}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [filterTerms, setFilterTerms] = useState([])
-    const curCourse = userStore.CurCourse;
-    const user = userStore.User;
-    const [form] = Form.useForm();
+    
+    const user = getLocalStorage(USER_STORAGE);
 
     const fetchSubjectAreas = async () => {
         setIsLoading(true)
-        const subjArea = curSubjectArea
-        let response1 = await TestingApi.getSubjectAreas();
-        setSubAreas(response1.data)
-        onChangeSubjArea(subjArea, response1.data)
+        try {
+            const subjArea = curSubjectArea
+            let response1 = await TestingApi.getSubjectAreas();
+            setSubAreas(response1.data)
+            onChangeSubjArea(subjArea, response1.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
         setIsLoading(false)
     }
 

@@ -1,68 +1,110 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
 import { Divider, Avatar, message } from "antd";
-import { Context } from "../../..";
 import {Row, Col, ListGroup, Button, Badge} from "react-bootstrap"
 import { BookOutlined } from '@ant-design/icons';
 import TestingApi from "../../../API/TestingApi";
-import { useFetching } from "../../hooks/useFetching";
 import Loader from "../../UI/Loader/Loader";
-import ErrorMessage from "../../UI/Messages/ErrorMessage";
-import { isAdmin } from "../../utils/testing";
-import { TESTING_ALL_COURSES_ROUTE } from "../../../utils/consts";
+import { getLocalStorage, isAdmin, setLocalStorage } from "../../utils/testing";
+import { CUR_COURSE_STORAGE, MY_COURSES_STORAGE, TESTING_ALL_COURSES_ROUTE, USER_STORAGE } from "../../../utils/consts";
 import history from "../../../services/history";
 import UsersList from "../Users/UsersList";
 import EditCourse from "../ModalForms/CourseEdit";
 
 const CourseInfo = () => {
-    const {userStore} = useContext(Context)
-    const curCourse = userStore.CurCourse;
     const [students, setStudents] = useState([])
     const [modules, setModules] = useState([])
     const [update, setUpdate] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [isVisibleCourseEditForm, setIsVisibleCourseEditForm] = useState(false)
-    const user = userStore.User;
+    
+    const user = getLocalStorage(USER_STORAGE);
+    const curCourse = getLocalStorage(CUR_COURSE_STORAGE);
+    const myCourses = getLocalStorage(MY_COURSES_STORAGE)
 
     let listStudents = []
     let listModules = []
 
-    const [fetchCourseInfo, isDataLoading, dataError] = useFetching(async () => {
-        let response = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-        userStore.setCurCourse(response.data)
-        setStudents(response.data.students)
-        setModules(response.data.modules)
-        //console.log(response.data)
-    })
-
-    const [fetchSubscribeCourse, isSubscribeLoading, subscribeError] = useFetching(async () => {
-        const item = {uid: userStore.User.uid, courseObj: userStore.CurCourse.courseObj}
-        let response = await TestingApi.subscribeCourse(item);
-        if (response.data === "ok") {
-            message.success('Вы подписались на курс успешно');
+    const fetchCourseInfo = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getCourseInfo(curCourse.courseObj);
+            setLocalStorage(CUR_COURSE_STORAGE, response.data)
+            setStudents(response.data.students)
+            setModules(response.data.modules)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        let response2 = await TestingApi.getUserCourses(userStore.User.uid);
-        userStore.setMyCourses(response2.data)
-        onUpdate()
-    })
+        setIsLoading(false)
+    }
 
-    const [fetchUnsubscribeCourse, isUnsubscribeLoading, unsubscribeError] = useFetching(async () => {
-        const item = {uid: userStore.User.uid, courseObj: userStore.CurCourse.courseObj}
-        let response = await TestingApi.unsubscribeCourse(item);
-        if (response.data === "ok") {
-            message.success('Вы отписались от курса успешно');
+    const fetchSubscribeCourse = async () => {
+        setIsLoading(true)
+        try {
+            const item = {uid: user.uid, courseObj: curCourse.courseObj}
+            let response = await TestingApi.subscribeCourse(item);
+            if (response.data === "ok") {
+                message.success('Вы подписались на курс успешно');
+            }
+            let response2 = await TestingApi.getUserCourses(user.uid);
+            setLocalStorage(MY_COURSES_STORAGE, response2.data)
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        let response2 = await TestingApi.getUserCourses(userStore.User.uid);
-        userStore.setMyCourses(response2.data)
-        onUpdate()
-    })
+        setIsLoading(false)
+    }
 
-    const [fetchDeleteCourse, isDeleteLoading, deleteError] = useFetching(async () => {
-        let response = await TestingApi.deleteCourse(userStore.CurCourse);
-        if (response.data === "ok") {
-            message.success('Курс удалён успешно');
+    const fetchUnsubscribeCourse = async () => {
+        setIsLoading(true)
+        try {
+            const item = {uid: user.uid, courseObj: curCourse.courseObj}
+            let response = await TestingApi.unsubscribeCourse(item);
+            if (response.data === "ok") {
+                message.success('Вы отписались от курса успешно');
+            }
+            let response2 = await TestingApi.getUserCourses(user.uid);
+            setLocalStorage(MY_COURSES_STORAGE, response2.data)
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        history.push(TESTING_ALL_COURSES_ROUTE);
-    })
+        setIsLoading(false)
+    }
+
+    const fetchDeleteCourse = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.deleteCourse(curCourse);
+            if (response.data === "ok") {
+                message.success('Курс удалён успешно');
+            }
+            history.push(TESTING_ALL_COURSES_ROUTE);
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     const onUpdate = () => {
         setUpdate(!update)
@@ -89,7 +131,7 @@ const CourseInfo = () => {
     }
 
     const isSubscribe = () => {
-        const courses = userStore.MyCourses.filter(elem => elem.courseName === userStore.CurCourse.courseName)
+        const courses = myCourses.filter(elem => elem.courseName === curCourse.courseName)
         return courses.length > 0 ? true : false
     }
 
@@ -162,8 +204,8 @@ const CourseInfo = () => {
                         {listModules}
                         </ListGroup>
                         {isSubscribe()
-                            ? <Button style={{marginTop: "20px"}} onClick={() => handleUnsubscribeCourse(userStore.CurCourse)} variant="outline-danger">Покинуть курс</Button>
-                            : <Button style={{marginTop: "20px"}} onClick={() => handleSubscribeCourse(userStore.CurCourse)} variant="outline-success">Подписаться на курс</Button>
+                            ? <Button style={{marginTop: "20px"}} onClick={() => handleUnsubscribeCourse(curCourse)} variant="outline-danger">Покинуть курс</Button>
+                            : <Button style={{marginTop: "20px"}} onClick={() => handleSubscribeCourse(curCourse)} variant="outline-success">Подписаться на курс</Button>
                         }
                     </Col>
                     <Col>
@@ -175,14 +217,13 @@ const CourseInfo = () => {
         )
     }
 
-    const spinner = isDataLoading || isSubscribeLoading || isUnsubscribeLoading ? <Loader/> : null;
-    const errorMessage = dataError || subscribeError || unsubscribeError ? <ErrorMessage message={dataError} /> : null;
-    const content = !(isDataLoading || isSubscribeLoading || isUnsubscribeLoading || dataError || subscribeError || unsubscribeError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = dataError || subscribeError || unsubscribeError ? <ErrorMessage message={dataError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

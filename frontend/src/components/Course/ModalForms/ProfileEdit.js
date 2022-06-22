@@ -1,27 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Input, Space, message } from 'antd';
-import { Context } from '../../..';
-import { deepEqual } from '../../utils/testing';
-import { useFetching } from '../../hooks/useFetching';
+import { Modal, Button, Form, Input, message } from 'antd';
+import { deepEqual, getLocalStorage } from '../../utils/testing';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
-import ErrorMessage from '../../UI/Messages/ErrorMessage';
+import { USER_STORAGE } from '../../../utils/consts';
 
 const ProfileEdit = ({isVisible, setIsVisible}) => {
-    const {userStore} = useContext(Context)
-    const user = userStore.User;
+    const [isLoading, setIsLoading] = useState(false)
 
-    const [fetchEditProfile, isEditLoading, editError] = useFetching(async () => {
-        let response = await TestingApi.editProfile(userStore.User);
-        if (response.data === "ok") {
-            message.success('Профиль изменен успешно');
-            setIsVisible(false)
-        } else {
-            userStore.setUser(user);
+    const user = getLocalStorage(USER_STORAGE);
+
+    const fetchEditProfile = async (newUser) => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.editProfile(newUser);
+            if (response.data === "ok") {
+                message.success('Профиль изменен успешно');
+                setIsVisible(false)
+            }
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        //console.log(response.data)
-    })
+        setIsLoading(false)
+    }
 
     const handleOk = () => {
         setIsVisible(false);
@@ -35,11 +42,10 @@ const ProfileEdit = ({isVisible, setIsVisible}) => {
 
     const onFinish = values => {
         values["uid"] = user.uid
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         const isEqual = deepEqual(values, user)
         if (!isEqual) {
-            userStore.setUser(values);
-            fetchEditProfile()
+            fetchEditProfile(values)
         }
     };
 
@@ -82,14 +88,13 @@ const ProfileEdit = ({isVisible, setIsVisible}) => {
         );
     }
 
-    const spinner = isEditLoading ? <Loader/> : null;
-    const errorMessage = editError ? <ErrorMessage message={editError} /> : null;
-    const content = !(isEditLoading || editError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = editError ? <ErrorMessage message={editError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

@@ -1,33 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
 import 'antd/dist/antd.css';
-import { Button, Form, Input, Select  } from "antd";
+import { Button, Form, Input, message, Select  } from "antd";
 import TestingApi from "../../../../API/TestingApi";
 import Loader from "../../../UI/Loader/Loader";
-import { isAdmin } from "../../../utils/testing";
+import { getLocalStorage, isAdmin } from "../../../utils/testing";
 import { UserOutlined } from '@ant-design/icons';
 import ListTerms from "./ListTerms";
 import { Context } from "../../../..";
 import CreateTemplate from "../../ModalForms/CreateNewTemplate";
 import ListTemplates from "./ListTemplates";
+import { USER_STORAGE } from "../../../../utils/consts";
 
 const Templates = ({updatePage}) => {
-    const {userStore} = useContext(Context)
+    const [form] = Form.useForm();
     const [templates, setTemplates] = useState([])
     const [searchTemplate, setSearchTemplate] = useState("")
     const [isVisibleCreateTemplateForm, setIsVisibleCreateTemplateForm] = useState(false)
     const [update, setOnUpdate] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [filterTemplates, setFilterTemplates] = useState([])
-    const curCourse = userStore.CurCourse;
-    const user = userStore.User;
-    const [form] = Form.useForm();
+
+    const user = getLocalStorage(USER_STORAGE);
 
     const fetchTemplates = async () => {
         setIsLoading(true)
-        let response = await TestingApi.getTemplates();
-        setTemplates(response.data)
-        setFilterTemplates(response.data)
-        //console.log(response.data)
+        try {
+            let response = await TestingApi.getTemplates();
+            setTemplates(response.data)
+            setFilterTemplates(response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
         setIsLoading(false)
     }
 

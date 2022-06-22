@@ -1,25 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
 import { Divider, message } from "antd";
-import { Context } from "../../..";
 import {Row, Col, ListGroup, Button} from "react-bootstrap"
 import history from "../../../services/history";
-import { COURSE_TESTS_TEST_VARIANTS_ROUTE } from "../../../utils/consts";
-import { isAdmin } from "../../utils/testing";
+import { COURSE_TESTS_TEST_VARIANTS_ROUTE, CUR_COURSE_STORAGE, CUR_MODULE_STORAGE, CUR_TEST_STORAGE, USER_STORAGE } from "../../../utils/consts";
+import { getLocalStorage, isAdmin, setLocalStorage } from "../../utils/testing";
 import { FormOutlined } from '@ant-design/icons';
 import CreateTestForm from "../ModalForms/CreateTestModule";
 import CreateModule from "../ModalForms/CreateModule";
 import TestingApi from "../../../API/TestingApi";
-import { useFetching } from "../../hooks/useFetching";
 import Loader from "../../UI/Loader/Loader";
-import ErrorMessage from "../../UI/Messages/ErrorMessage";
 import ModuleEdit from "../ModalForms/EditModule";
 
 const CourseTests = () => {
-    const {userStore} = useContext(Context)
-    const [curCourse, setCurCourse] = useState(userStore.CurCourse);
-    const [update, setUpdate] = useState(false);
-    const user = userStore.User;
+    const [curCourse, setCurCourse] = useState(getLocalStorage(CUR_COURSE_STORAGE));
+    const [isLoading, setIsLoading] = useState(false)
+    
+    const user = getLocalStorage(USER_STORAGE)
 
     const [isCreateTestFormVisible, setIsCreateTestFormVisible] = useState(false)
     const [isCreateModuleFormVisible, setIsCreateModuleFormVisible] = useState(false)
@@ -28,35 +25,46 @@ const CourseTests = () => {
     let listTests = []
     let listModules = []
 
-    const [fetchDeleteModule, isdeleteLoading, deleteError] = useFetching(async () => {
-        const item = {moduleObj: userStore.CurModule.moduleObj, courseObj: userStore.CurCourse.courseObj}
-        let response = await TestingApi.deleteModule(item);
-        if (response.data === "ok") {
-            message.success('Модуль удален успешно');
+    const fetchDeleteModule = async (module) => {
+        setIsLoading(true)
+        try {
+            const item = {moduleObj: module.moduleObj, courseObj: curCourse.courseObj}
+            let response = await TestingApi.deleteModule(item);
+            if (response.data === "ok") {
+                message.success('Модуль удален успешно');
+            }
+            let response1 = await TestingApi.getCourseInfo(curCourse.courseObj);
+            setLocalStorage(CUR_COURSE_STORAGE, response1.data)
+            setCurCourse(response1.data)
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-        userStore.setCurCourse(response1.data)
-        onUpdate()
-        //console.log(response.data)
-    })
+        setIsLoading(false)
+    }
 
     const onUpdate = () => {
-        setCurCourse(userStore.CurCourse)
+        setCurCourse(getLocalStorage(CUR_COURSE_STORAGE))
     }
 
     useEffect(() => {
-        //console.log("update")
-        onUpdate()
+        console.log("update")
+        //onUpdate()
     }, [curCourse])
 
     const handleTest = (module, test) => {
-        userStore.setCurModule(module);
-        userStore.setCurTest(test);
+        setLocalStorage(CUR_MODULE_STORAGE, module)
+        setLocalStorage(CUR_TEST_STORAGE, test)
         history.push(COURSE_TESTS_TEST_VARIANTS_ROUTE);
     }
 
     const handleCreateTest = (module) => {
-        userStore.setCurModule(module);
+        setLocalStorage(CUR_MODULE_STORAGE, module)
         setIsCreateTestFormVisible(true)
     }
 
@@ -65,12 +73,11 @@ const CourseTests = () => {
     }
 
     const handleDeleteModule = (module) => {
-        userStore.setCurModule(module);
-        fetchDeleteModule()
+        fetchDeleteModule(module)
     }
 
     const handleEditModule = (module) => {
-        userStore.setCurModule(module);
+        setLocalStorage(CUR_MODULE_STORAGE, module)
         setIsEditModuleFormVisible(true)
     }
 
@@ -131,7 +138,7 @@ const CourseTests = () => {
                             </Button>
                         : null
                     }
-                    <CreateTestForm isVisible={isCreateTestFormVisible} setIsVisible={setIsCreateTestFormVisible} module={item} onUpdate={onUpdate}></CreateTestForm>                
+                    <CreateTestForm isVisible={isCreateTestFormVisible} setIsVisible={setIsCreateTestFormVisible} onUpdate={onUpdate}></CreateTestForm>                
                 </ListGroup.Item>
             )
         })
@@ -175,14 +182,13 @@ const CourseTests = () => {
         }
     }
 
-    const spinner = isdeleteLoading ? <Loader/> : null;
-    const errorMessage = deleteError ? <ErrorMessage message={deleteError} /> : null;
-    const content = !(isdeleteLoading || deleteError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = deleteError ? <ErrorMessage message={deleteError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

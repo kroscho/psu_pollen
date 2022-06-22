@@ -1,19 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
-import { Avatar, Button, Divider, List, Skeleton } from "antd";
+import { Avatar, Button, Divider, List } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import RoleEdit from "../ModalForms/EditRole";
-import { isAdmin } from "../../utils/testing";
-import { Context } from "../../..";
+import { getLocalStorage, isAdmin } from "../../utils/testing";
+import { USER_STORAGE } from "../../../utils/consts";
 
 const UsersList = ({onUpdateUsers, isEdit, isCheck, handleCheckAttempts, users}) => {
-    const {userStore} = useContext(Context)
     const [isEditRoleFormVisible, setIsEditRoleFormVisible] = useState(false)
     const [userEdit, setUserEdit] = useState({})
-    const user = userStore.User;
+    
+    const user = getLocalStorage(USER_STORAGE);
 
     const handleEditRole = (userItem) => {
-       // console.log(userItem)
         setUserEdit(userItem)
         setIsEditRoleFormVisible(true)
     }

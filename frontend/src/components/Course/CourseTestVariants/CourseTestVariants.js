@@ -1,52 +1,83 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
-import { Context } from "../../..";
 import {Button} from "react-bootstrap"
 import history from "../../../services/history";
-import { COURSE_TESTS_ROUTE, TESTS_TEST_ATTEMPTS_DETAILS_ROUTE, TESTS_TEST_ATTEMPT_ROUTE, TESTS_TEST_CHECK_WORKS_ROUTE, TESTS_TEST_ROUTE } from "../../../utils/consts";
-import { isAdmin } from "../../utils/testing";
+import { COURSE_TESTS_ROUTE, CUR_ATTEMPTS_STORAGE, CUR_COURSE_STORAGE, CUR_TEST_STORAGE, TESTS_TEST_ATTEMPTS_DETAILS_ROUTE, TESTS_TEST_ATTEMPT_ROUTE, TESTS_TEST_CHECK_WORKS_ROUTE, TESTS_TEST_ROUTE, USER_STORAGE } from "../../../utils/consts";
+import { getLocalStorage, isAdmin, setLocalStorage } from "../../utils/testing";
 import TestEdit from "../ModalForms/CourseTestEdit";
-import ErrorMessage from "../../UI/Messages/ErrorMessage";
 import Loader from "../../UI/Loader/Loader";
-import { useFetching } from "../../hooks/useFetching";
 import TestingApi from "../../../API/TestingApi";
-import { Divider, Row } from "antd";
+import { Divider, message, Row } from "antd";
 
 const CourseTestVariants = () => {
-    const {userStore} = useContext(Context)
+    const [isLoading, setIsLoading] = useState(false)
     const [attempts, setAttempts] = useState([])
-    const curTest = userStore.CurTest;
-    const user = userStore.User;
+    
+    const curTest = getLocalStorage(CUR_TEST_STORAGE)
+    const curCourse = getLocalStorage(CUR_COURSE_STORAGE)
+    const user = getLocalStorage(USER_STORAGE)
 
     const [isEsitTestFormVisible, setIsEditTestFormVisible] = useState(false)
 
-    const [fetchAttempts, isAttemptsLoading, attemptsError] = useFetching(async () => {
-        let response = await TestingApi.getAttempts(userStore.User.uid, userStore.CurTest.testName)
-        setAttempts(response.data)
-        userStore.setCurAttempts(response.data)
-        //console.log(response.data)
-    })
+    const fetchAttempts = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getAttempts(user.uid, curTest.testName)
+            setAttempts(response.data)
+            setLocalStorage(CUR_ATTEMPTS_STORAGE, response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
-    const [fetchTest, isTestLoading, testError] = useFetching(async () => {
-        //console.log("CurTest: ", userStore.CurTest)
-        let response = await TestingApi.getTest(userStore.CurTest.testName)
-        userStore.setCurTest(response.data)
-        //console.log(response.data)
-    })
+    const fetchTest = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getTest(curTest.testName)
+            setLocalStorage(CUR_TEST_STORAGE, response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         fetchAttempts()
         fetchTest()
     }, [])
 
-    const [fetchDelete, isDeleteLoading, deleteError] = useFetching(async () => {
-        let response = await TestingApi.deleteTest(userStore.CurTest);
-        //console.log(response.data)
-        let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-        userStore.setCurCourse(response1.data)
-        userStore.setCurTest({})
-        history.push(COURSE_TESTS_ROUTE);
-    })
+    const fetchDelete = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.deleteTest(curTest);
+            let response1 = await TestingApi.getCourseInfo(curCourse.courseObj);
+            setLocalStorage(CUR_COURSE_STORAGE, response1.data)
+            setLocalStorage(CUR_TEST_STORAGE, {})
+            if (response.data === "ok") {
+                message.success("Тест успешно удален")
+            }
+            history.push(COURSE_TESTS_ROUTE);
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     const handleStartTest = () => {
         history.push(TESTS_TEST_ATTEMPT_ROUTE);
@@ -116,7 +147,7 @@ const CourseTestVariants = () => {
                         : null
                     }
                 </Row>
-                { !isTestLoading
+                { !isLoading
                     ? <TestEdit isVisible={isEsitTestFormVisible} setIsVisible={setIsEditTestFormVisible}></TestEdit>
                     : null
                 }
@@ -124,14 +155,13 @@ const CourseTestVariants = () => {
         )
     }
 
-    const spinner = isAttemptsLoading || isTestLoading ? <Loader/> : null;
-    const errorMessage = attemptsError ? <ErrorMessage message={attemptsError} /> : null;
-    const content = !(isAttemptsLoading || attemptsError || isTestLoading || testError) ? <View/> : null;
+    const spinner = isLoading ? <Loader/> : null;
+    //const errorMessage = attemptsError ? <ErrorMessage message={attemptsError} /> : null;
+    const content = !(isLoading) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

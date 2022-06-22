@@ -1,42 +1,48 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Input, Upload, Avatar, message, Select } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { Context } from '../../..';
-import { deepEqual } from '../../utils/testing';
+import { Modal, Button, Form, Input, message, Select } from 'antd';
+import { deepEqual, getLocalStorage, setLocalStorage } from '../../utils/testing';
 import { useFetching } from '../../hooks/useFetching';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
-import ErrorMessage from '../../UI/Messages/ErrorMessage';
+import { CUR_COURSE_STORAGE, CUR_MODULE_STORAGE } from '../../../utils/consts';
 const { Option } = Select;
 
 const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
-    const {userStore} = useContext(Context)
-    const [url, setUrl] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const [subAreas, setSubAreas] = useState([])
-    const user = userStore.User;
-    const curModule = userStore.CurModule;
+    
     const [form] = Form.useForm();
+
+    const curCourse = getLocalStorage(CUR_COURSE_STORAGE)
+    const curModule = getLocalStorage(CUR_MODULE_STORAGE)
 
     const [fetchSubjectAreas, isDataLoading, dataError] = useFetching(async () => {
         let response = await TestingApi.getSubjectAreas();
         setSubAreas(response.data)
-        //console.log(response.data)
     })
 
-    const [fetchEditModule, isEditLoading, editError] = useFetching(async () => {
-        let response = await TestingApi.editModule(userStore.CurModule);
-        if (response.data === "ok") {
-            message.success('Модуль изменен успешно');
-            let response1 = await TestingApi.getCourseInfo(userStore.CurCourse.courseObj);
-            userStore.setCurCourse(response1.data)
-            onUpdate()
-            setIsVisible(false)
-        } else {
-            userStore.setCurModule(curModule);
+    const fetchEditModule = async (module) => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.editModule(module);
+            if (response.data === "ok") {
+                message.success('Модуль изменен успешно');
+                let response1 = await TestingApi.getCourseInfo(curCourse.courseObj);
+                setLocalStorage(CUR_COURSE_STORAGE, response1.data)
+                setIsVisible(false)
+                onUpdate()
+            } 
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        //console.log(response.data)
-    })
+        setIsLoading(false)
+    }
 
     useEffect(() => {
         if (isVisible) {
@@ -54,11 +60,10 @@ const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
 
     const onFinish = values => {
         values["moduleObj"] = curModule.moduleObj
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         const isEqual = deepEqual(values, curModule)
         if (!isEqual) {
-            userStore.setCurModule(values);
-            fetchEditModule()
+            fetchEditModule(values)
         }
     };
 
@@ -101,14 +106,13 @@ const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
         );
     }
 
-    const spinner = isEditLoading || isDataLoading ? <Loader/> : null;
-    const errorMessage = editError ? <ErrorMessage message={editError} /> : null;
-    const content = !(isEditLoading || isDataLoading || dataError || editError) ? <View/> : null;
+    const spinner = isLoading || isDataLoading ? <Loader/> : null;
+   // const errorMessage = editError ? <ErrorMessage message={editError} /> : null;
+    const content = !(isLoading || isDataLoading || dataError) ? <View/> : null;
 
     return (
         <>
             {spinner}
-            {errorMessage}
             {content}
         </>
     )

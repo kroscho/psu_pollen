@@ -18,3 +18,11 @@ export const getWordAnswer = (index) => {
     const listWords = ["a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)", "j)", "k)", "l)"]
     return listWords[index]
 }
+
+export const setLocalStorage = (key, item) => {
+    localStorage.setItem(key, JSON.stringify(item))
+} 
+
+export const getLocalStorage = (key) => {
+    return JSON.parse(localStorage.getItem(key))
+} 

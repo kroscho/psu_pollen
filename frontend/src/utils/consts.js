@@ -30,3 +30,12 @@ export const SINGLE_TASK_TYPE = "2"
 export const MULTIPLE_TASK_TYPE = "3"
 export const LOGICAL_TASK_TYPE = "4"
 
+
+export const USER_STORAGE = 'user'
+export const CUR_USER_STORAGE = 'curUser'
+export const MY_COURSES_STORAGE = 'myCourses'
+export const CUR_COURSE_STORAGE = 'curCourse'
+export const CUR_MODULE_STORAGE = 'curModule'
+export const CUR_TEST_STORAGE = 'curTest'
+export const CUR_ATTEMPTS_STORAGE = 'curAttempts'
+export const CUR_LECTURE_STORAGE = 'curLecture'

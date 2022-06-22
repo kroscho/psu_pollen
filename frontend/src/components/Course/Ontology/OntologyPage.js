@@ -1,22 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import 'antd/dist/antd.css';
-import { Button, Form, Input, Select, Tabs  } from "antd";
-import { Context } from "../../..";
+import { Tabs  } from "antd";
 import Concepts from "./Compon/Concepts";
 import Templates from "./Compon/Templates";
-
 
 const { TabPane } = Tabs;
 
 const OntologyPage = () => {
-    const {userStore} = useContext(Context)
     const [updateConcepts, setUpdateConcepts] = useState(false)
     const [updateTemplates, setUpdateTemplates] = useState(false)
-    const curCourse = userStore.CurCourse;
-    const user = userStore.User;
 
     const onChange = (key) => {
-       // console.log(key);
         if (key === "1") {
           setUpdateConcepts(!updateConcepts)
         } else if (key === "2") {

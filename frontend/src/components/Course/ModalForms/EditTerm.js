@@ -1,33 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Modal, Button, Form, Input, message, Select, Checkbox, Space } from 'antd';
-import { Context } from '../../..';
 import TestingApi from '../../../API/TestingApi';
 import Loader from '../../UI/Loader/Loader';
 import TextArea from 'antd/lib/input/TextArea';
 import { deepEqual } from '../../utils/testing';
 
 const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
-    
-    const [url, setUrl] = useState("")
-    const [subAreas, setSubAreas] = useState([])
+    const [form] = Form.useForm();
     const [templates, setTemplates] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-   // const [isMultipleAnswer, setIsMultipleAnswer] = useState(false)
     const [curTerm, setCurTerm] = useState({})
-    const [form] = Form.useForm();
-    const {userStore} = useContext(Context)
 
     const fetchTemplates = async () => {
         setIsLoading(true)
-        let response = await TestingApi.getTemplates();
-        setTemplates(response.data)
-        //console.log(response.data)
-        let response1 = await TestingApi.getInfoByTerm(term);
-        //console.log(response1.data)
-        setCurTerm(response1.data)
-        updateForm(response1.data)
+        try {
+            let response = await TestingApi.getTemplates();
+            setTemplates(response.data)
+            let response1 = await TestingApi.getInfoByTerm(term);
+            setCurTerm(response1.data)
+            updateForm(response1.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
         setIsLoading(false)
     }
 
@@ -46,15 +47,23 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
 
     const fetchEditTerm = async (fields) => {
         setIsLoading(true)
-        fields["subjectArea"] = subjectArea
-        //console.log("item: ", fields)
-        let response = await TestingApi.updateTerm(fields);
-        if (response.data === "ok") {
-            message.success('Концепт обновлен успешно');
+        try {
+            fields["subjectArea"] = subjectArea
+            let response = await TestingApi.updateTerm(fields);
+            if (response.data === "ok") {
+                message.success('Концепт обновлен успешно');
+            }
+            setIsVisible(false);
+            setIsLoading(false)
+            onUpdate()
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
         }
-        setIsVisible(false);
-        setIsLoading(false)
-        onUpdate()
     }
 
     const handleCancel = () => {
@@ -63,7 +72,6 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
 
     const handleChangeCheckBox = () => {
         const fields = form.getFieldsValue();
-        //console.log(fields)
         setCurTerm(fields)
         form.setFieldsValue({
             nameTerm: fields.nameTerm,
@@ -72,7 +80,7 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
     }
 
     const onFinish = values => {
-        //console.log('Received values of form:', values);
+        console.log('Received values of form:', values);
         fetchEditTerm(values)
     };
 
@@ -204,16 +212,6 @@ const EditTerm = ({isVisible, setIsVisible, term, subjectArea, onUpdate}) => {
             </>
         );
     }
-
-    /*const spinner = isLoading ? <Loader/> : null;
-    const content = !(isLoading) ? <View/> : null;
-
-    return (
-        <>
-            {spinner}
-            {content}
-        </>
-    )*/
 };
 
 export default EditTerm;

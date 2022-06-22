@@ -1,31 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
-import { Context } from "../../..";
-import { Col, Divider, Form, Input, Row } from "antd";
-import { useFetching } from "../../hooks/useFetching";
+import { Col, Divider, Form, Input, message, Row } from "antd";
 import TestingApi from "../../../API/TestingApi";
 import UsersList from "../Users/UsersList";
 import Loader from "../../UI/Loader/Loader";
 import { UserOutlined } from '@ant-design/icons';
 import AttemptsDetails from "../AttemptsDetails/AttemptsDetails";
+import { getLocalStorage, setLocalStorage } from "../../utils/testing";
+import { CUR_ATTEMPTS_STORAGE, CUR_TEST_STORAGE } from "../../../utils/consts";
 
 const CheckWorks = () => {
-    const {userStore} = useContext(Context)
     const [usersAttempts, setUsersAttempts] = useState([])
-    const [curAttempts, setCurAttempts] = useState([])
     const [filterUsers, setFilterUsers] = useState([])
     const [searchUser, setSearchUser] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const [update, setUpdate] = useState(false)
 
-    const [fetchUsersWhoPassedTheTest, isDataLoading, dataError] = useFetching(async () => {
-        let response = await TestingApi.getUsersWhoPassedTheTest(userStore.CurTest);
-        //console.log(response.data)
-        setUsersAttempts(response.data)
-        setFilterUsers(response.data)
-    })
+    const curTest = getLocalStorage(CUR_TEST_STORAGE)
+
+    const fetchUsersWhoPassedTheTest = async () => {
+        setIsLoading(true)
+        try {
+            let response = await TestingApi.getUsersWhoPassedTheTest(curTest);
+            setUsersAttempts(response.data)
+            setFilterUsers(response.data)
+        } catch (err) {
+            let errMessage = "";
+            if (err instanceof Error) {
+                errMessage = err.message;
+            }
+            console.log(errMessage);
+            message.error(errMessage)
+        }
+        setIsLoading(false)
+    }
 
     useEffect(() => {
-        userStore.setCurAttempts([])
+        //setLocalStorage(CUR_ATTEMPTS_STORAGE, [])
         fetchUsersWhoPassedTheTest()
     }, [update])
 
@@ -34,9 +45,7 @@ const CheckWorks = () => {
     }
 
     const handleCheckAttempts = (user) => {
-        //console.log("checkUser: ", user)
-        userStore.setCurAttempts(user.attempts)
-        setCurAttempts(user.attempts)
+        setLocalStorage(CUR_ATTEMPTS_STORAGE, user.attempts)
     }
 
     const onChange = (e) => {
@@ -44,7 +53,7 @@ const CheckWorks = () => {
         setFilterUsers(usersAttempts.filter(user => user.fullName.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1))
     }
 
-    if (isDataLoading) {
+    if (isLoading) {
         return (
             <Loader></Loader>
         )
