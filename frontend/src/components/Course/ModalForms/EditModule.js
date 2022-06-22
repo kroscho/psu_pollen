@@ -4,7 +4,6 @@ import { Modal, Button, Form, Input, message, Select } from 'antd';
 import { deepEqual, getLocalStorage, setLocalStorage } from '../../utils/testing';
 import { useFetching } from '../../hooks/useFetching';
 import TestingApi from '../../../API/TestingApi';
-import Loader from '../../UI/Loader/Loader';
 import { CUR_COURSE_STORAGE, CUR_MODULE_STORAGE } from '../../../utils/consts';
 const { Option } = Select;
 
@@ -48,7 +47,7 @@ const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
         if (isVisible) {
             fetchSubjectAreas()
         }
-    }, [])
+    }, [isVisible])
 
     const handleOk = () => {
         setIsVisible(false);
@@ -73,9 +72,8 @@ const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
         )
     })
 
-    const View = () => {
+    if (curModule) {
         return (
-            <>
             <Modal title="Редактирование модуля" visible={isVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form 
                     form={form} 
@@ -102,20 +100,10 @@ const ModuleEdit = ({isVisible, setIsVisible, onUpdate}) => {
                     </Form.Item>
                 </Form>
             </Modal>
-            </>
         );
+    } else {
+        return null;
     }
-
-    const spinner = isLoading || isDataLoading ? <Loader/> : null;
-   // const errorMessage = editError ? <ErrorMessage message={editError} /> : null;
-    const content = !(isLoading || isDataLoading || dataError) ? <View/> : null;
-
-    return (
-        <>
-            {spinner}
-            {content}
-        </>
-    )
 };
 
 export default ModuleEdit;
